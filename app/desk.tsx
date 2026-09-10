@@ -31,6 +31,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Empty } from '@/components/ui/empty';
 import PDFPreview from './pdf-preview';
+import PaidWorkspace from './paid-workspace';
 import { Slider } from '@/components/ui/slider';
 import {
   Select,
@@ -916,6 +917,7 @@ export default function Desk() {
         <Button variant="ghost" onClick={() => setDialog('help')}>
           <HelpCircle size={17} /> Help
         </Button>
+        <PaidWorkspace />
       </header>
       <main className="main">
         <Tabs

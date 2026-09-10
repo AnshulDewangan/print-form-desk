@@ -1,6 +1,6 @@
 # Print & Form Desk
 
-Device-local photo, signature and PDF workspace. Seven discoverable tools share an Add → Adjust & preview → Download flow. Customer files live in tab memory; localStorage contains reusable settings only. No customer file uploads, checkout, subscriptions, account sync or official portal compliance verification is implemented.
+Device-local photo, signature and PDF workspace. Seven free tools share an Add → Adjust & preview → Download flow. The application workspace adds photo/signature packs, optional original attachments, account templates and Personal/Shop passes. Customer files live in tab memory. D1 stores template settings and billing records; customer file uploads and official portal compliance verification are not implemented.
 
 ## Development
 
@@ -25,4 +25,22 @@ The embedded testing browser did not emit a native download event for blob links
 
 PDF viewer assets are copied from the installed pdfjs-dist version by predev/prebuild. They are served from this site rather than an external CDN. `scripts/browser-fixtures.mjs` creates synthetic local QA files in ignored `work/qa/`.
 
-This beta is intended for private review. Taking payments requires a real payment provider, server-side entitlement checks, account recovery, pricing and support policies before public commercial launch.
+This beta is intended for private review. Purchases are disabled until the owner connects and tests a merchant account. Actual Razorpay checkout and webhook delivery have not been tested against a merchant account.
+
+## Paid workspace
+
+- Personal: proposed ₹49 / 30 days, application-pack ZIP downloads and 5 account templates.
+- Shop: proposed ₹199 / 30 days, the same processing, 50 account templates and next-customer reset preserving settings.
+- Free tools stay free. Passes do not renew automatically; another pass can be purchased after expiry. Test grants are isolated from live grants.
+- Sites dispatch-owned ChatGPT sign-in supplies identity. Customer-facing email/password authentication is not implemented. Public access is a separate hosting decision; the site remains private.
+- Razorpay orders use server-defined prices, signature verification and API-confirmed captured payments. Payment/order uniqueness prevents duplicate grants. Webhooks activate access even if the customer closes checkout, and refund notifications revoke access. A refreshed account checks expiry on every request.
+- D1 uses generated Drizzle migrations. Apply the migration locally using Wrangler against the configured DB before testing signed-in pages. The hosted package applies migrations during deployment.
+- `node scripts/test-billing.mjs` exercises production modules against an isolated in-memory SQLite database and mocked payment-provider responses. No test grants are written to the app database.
+
+### Merchant setup before enabling purchases
+
+Configure the keys named in `.env.example` securely in Sites, starting with `BILLING_MODE=test`. Subscribe the merchant webhook to `payment.captured`, `refund.created` and `refund.processed` at `/api/billing/webhook`. Set its secret separately from the API secret. Set `BILLING_ENABLED=true` only after keys and webhook are configured. Keep local environment values and hosted runtime values aligned; never commit credentials.
+
+Before live mode, verify actual test checkout, payment failure, closing checkout after payment, duplicate webhook delivery, refunds, template ownership and normal-browser downloads. Finalise business identity, support contact, customer-facing refund terms and applicable tax treatment before opening sales. Configure live keys and a live webhook secret, then set `BILLING_MODE=live` and deploy. Existing test passes cannot become live passes.
+
+Client-side processing cannot provide tamper-proof feature locks. Server-backed templates and account operations are access-controlled; determined users can reproduce browser-only image/ZIP processing. Background removal, document cleanup, receipts, automatic renewals and team seats are not part of this release.
