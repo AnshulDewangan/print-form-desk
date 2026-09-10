@@ -1,2 +1,4 @@
 import Desk from './desk';
-export default function Home() { return <Desk/>; }
+export default function Home() {
+  return <Desk />;
+}
