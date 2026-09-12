@@ -1388,6 +1388,8 @@ h1 svg {
 .pack-check input { width: 18px; height: 18px; }
 .paid-notice { padding: 14px; border: 1px solid #a6c5b5; background: #eff8f3; border-radius: 8px; margin: 16px 0; line-height: 1.5; }
 .paid-link { color: #08623d; text-decoration: underline; font-weight: 600; }
+.auth-panel { margin: 14px 0; padding: 14px; border: 1px solid #d8e3dd; border-radius: 10px; background: #f7faf8; }
+.auth-divider { color: #52635a; font-size: 13px; margin: 10px 0; }
 .plan-price { font-size: 32px; font-weight: 700; margin: 14px 0; }
 .plan-price span { font-size: 14px; font-weight: 400; }
 .plan-card ul { padding-left: 20px; list-style: disc; margin: 16px 0; line-height: 1.7; }

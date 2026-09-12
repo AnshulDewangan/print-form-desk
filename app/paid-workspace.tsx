@@ -20,15 +20,23 @@ import {
 import { decode, encodeJPEG, renderCanvas } from '@/lib/images';
 import { formatBytes } from '@/lib/workflow';
 import type { Settings } from '@/lib/geometry';
+import { supabaseBrowser } from '@/lib/supabase-browser';
+import AuthPanel from './auth-panel';
 
 async function api<T = Record<string, unknown>>(
   path: string,
   body?: object,
   method?: string,
 ): Promise<T> {
+  const session = (await supabaseBrowser()?.auth.getSession())?.data.session;
+  const headers: Record<string, string> = body
+    ? { 'Content-Type': 'application/json' }
+    : {};
+  if (session?.access_token)
+    headers.Authorization = `Bearer ${session.access_token}`;
   const r = await fetch(path, {
     method: method ?? (body ? 'POST' : 'GET'),
-    headers: body ? { 'Content-Type': 'application/json' } : undefined,
+    headers,
     body: body ? JSON.stringify(body) : undefined,
   });
   const result = (await r.json()) as T & { error?: string };
@@ -432,29 +440,7 @@ export default function PaidWorkspace() {
                       . It does not renew automatically.
                     </p>
                   )}
-                  {!account.signedIn && (
-                    <p>
-                      <a
-                        className="paid-link"
-                        href="/signin-with-chatgpt?return_to=%2F%3Fworkspace%3Dplans"
-                        target="_top"
-                      >
-                        Sign in with ChatGPT
-                      </a>
-                    </p>
-                  )}
-                  {account.signedIn && (
-                    <p className="paid-small">
-                      Signed in ·{' '}
-                      <a
-                        className="paid-link"
-                        href="/signout-with-chatgpt?return_to=%2F%3Fworkspace%3Dplans"
-                        target="_top"
-                      >
-                        Sign out
-                      </a>
-                    </p>
-                  )}
+                  <AuthPanel onChange={() => void refresh()} />
                   <div className="plan-grid">
                     {(Object.keys(PLANS) as PlanId[]).map((id) => (
                       <article className="plan-card" key={id}>

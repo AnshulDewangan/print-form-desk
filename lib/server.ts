@@ -27,7 +27,29 @@ export class HttpError extends Error {
 export async function userId() {
   // These identity headers are provided by the Sites dispatcher, never by form fields.
   // The Sites dev plugin supplies its own local-only test sign-in.
-  return (await headers()).get('oai-authenticated-user-id');
+  const h = await headers();
+  const native = h.get('oai-authenticated-user-id');
+  if (native) return native;
+  const token = h.get('authorization')?.match(/^Bearer\s+(.+)$/i)?.[1];
+  const r = runtime() as Runtime & {
+    SUPABASE_URL?: string;
+    SUPABASE_ANON_KEY?: string;
+  };
+  if (!token || !r.SUPABASE_URL || !r.SUPABASE_ANON_KEY) return null;
+  try {
+    const result = await fetch(`${r.SUPABASE_URL}/auth/v1/user`, {
+      headers: {
+        apikey: r.SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${token}`,
+      },
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!result.ok) return null;
+    const user = (await result.json()) as { id?: string };
+    return typeof user.id === 'string' ? `supabase:${user.id}` : null;
+  } catch {
+    return null;
+  }
 }
 export async function requireUser() {
   const id = await userId();
