@@ -8,16 +8,22 @@ export default function AuthPanel({ onChange }: { onChange?: () => void }) {
     [message, setMessage] = useState(''),
     [user, setUser] = useState<string | null>(null),
     [busy, setBusy] = useState(false);
-  const client = supabaseBrowser();
+  const [client, setClient] =
+    useState<Awaited<ReturnType<typeof supabaseBrowser>>>(null);
   useEffect(() => {
-    if (!client) return;
-    client.auth.getUser().then(({ data }) => setUser(data.user?.email ?? null));
-    const { data } = client.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user?.email ?? null);
-      onChange?.();
+    let cleanup = () => {};
+    void supabaseBrowser().then((auth) => {
+      setClient(auth);
+      if (!auth) return;
+      auth.auth.getUser().then(({ data }) => setUser(data.user?.email ?? null));
+      const { data } = auth.auth.onAuthStateChange((_event, session) => {
+        setUser(session?.user?.email ?? null);
+        onChange?.();
+      });
+      cleanup = () => data.subscription.unsubscribe();
     });
-    return () => data.subscription.unsubscribe();
-  }, [client, onChange]);
+    return () => cleanup();
+  }, [onChange]);
   if (!client)
     return (
       <p className="paid-small">

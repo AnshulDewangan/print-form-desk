@@ -28,7 +28,8 @@ async function api<T = Record<string, unknown>>(
   body?: object,
   method?: string,
 ): Promise<T> {
-  const session = (await supabaseBrowser()?.auth.getSession())?.data.session;
+  const session = (await (await supabaseBrowser())?.auth.getSession())?.data
+    .session;
   const headers: Record<string, string> = body
     ? { 'Content-Type': 'application/json' }
     : {};
