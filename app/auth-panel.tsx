@@ -1,8 +1,8 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { supabaseBrowser } from '@/lib/supabase-browser';
+import { supabaseBrowser, hasGoogleSignIn } from '@/lib/supabase-browser';
 export default function AuthPanel({ onChange }: { onChange?: () => void }) {
   const [email, setEmail] = useState(''),
     [message, setMessage] = useState(''),
@@ -10,20 +10,41 @@ export default function AuthPanel({ onChange }: { onChange?: () => void }) {
     [busy, setBusy] = useState(false);
   const [client, setClient] =
     useState<Awaited<ReturnType<typeof supabaseBrowser>>>(null);
+  const [loading, setLoading] = useState(true);
+  const onChangeRef = useRef(onChange);
+  onChangeRef.current = onChange;
   useEffect(() => {
+    let disposed = false;
+    let timer: ReturnType<typeof setTimeout> | undefined;
     let cleanup = () => {};
     void supabaseBrowser().then((auth) => {
+      if (disposed) return;
       setClient(auth);
+      setLoading(false);
       if (!auth) return;
-      auth.auth.getUser().then(({ data }) => setUser(data.user?.email ?? null));
       const { data } = auth.auth.onAuthStateChange((_event, session) => {
+        if (disposed) return;
         setUser(session?.user?.email ?? null);
-        onChange?.();
+        // Leave the Supabase auth lock before refreshing account data.
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          if (!disposed) onChangeRef.current?.();
+        }, 0);
       });
       cleanup = () => data.subscription.unsubscribe();
     });
-    return () => cleanup();
-  }, [onChange]);
+    return () => {
+      disposed = true;
+      clearTimeout(timer);
+      cleanup();
+    };
+  }, []);
+  if (loading)
+    return (
+      <p className="paid-small" role="status">
+        Loading sign-in…
+      </p>
+    );
   if (!client)
     return (
       <p className="paid-small">
@@ -34,12 +55,18 @@ export default function AuthPanel({ onChange }: { onChange?: () => void }) {
   const auth = client;
   async function google() {
     setBusy(true);
-    const { error } = await auth.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: window.location.origin + '/?workspace=plans' },
-    });
-    if (error) setMessage(error.message);
-    setBusy(false);
+    setMessage('');
+    try {
+      const { error } = await auth.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: window.location.origin + '/?workspace=plans' },
+      });
+      if (error) setMessage(error.message);
+    } catch {
+      setMessage('Could not reach sign-in. Please try again.');
+    } finally {
+      setBusy(false);
+    }
   }
   async function magicLink() {
     setBusy(true);
@@ -49,23 +76,33 @@ export default function AuthPanel({ onChange }: { onChange?: () => void }) {
       setBusy(false);
       return;
     }
-    const { error } = await auth.auth.signInWithOtp({
-      email: clean,
-      options: {
-        emailRedirectTo: window.location.origin + '/?workspace=plans',
-      },
-    });
-    setMessage(
-      error ? error.message : 'Check your email for a secure sign-in link.',
-    );
-    setBusy(false);
+    try {
+      const { error } = await auth.auth.signInWithOtp({
+        email: clean,
+        options: {
+          emailRedirectTo: window.location.origin + '/?workspace=plans',
+        },
+      });
+      setMessage(
+        error ? error.message : 'Check your email for a secure sign-in link.',
+      );
+    } catch {
+      setMessage('Could not send the sign-in link. Please try again.');
+    } finally {
+      setBusy(false);
+    }
   }
   async function signOut() {
     setBusy(true);
-    await auth.auth.signOut();
-    setMessage('Signed out.');
-    setBusy(false);
-    onChange?.();
+    try {
+      const { error } = await auth.auth.signOut();
+      if (error) setMessage(error.message);
+      else setMessage('Signed out.');
+    } catch {
+      setMessage('Could not sign out. Please try again.');
+    } finally {
+      setBusy(false);
+    }
   }
   if (user)
     return (
@@ -83,10 +120,23 @@ export default function AuthPanel({ onChange }: { onChange?: () => void }) {
     );
   return (
     <div className="auth-panel">
-      <Button type="button" variant="outline" disabled={busy} onClick={google}>
-        Continue with Google
-      </Button>
-      <div className="auth-divider">or use email</div>
+      {hasGoogleSignIn() && (
+        <>
+          <Button
+            type="button"
+            variant="outline"
+            disabled={busy}
+            onClick={google}
+          >
+            Continue with Google
+          </Button>
+          <div className="auth-divider">or use email</div>
+        </>
+      )}
+      <p className="paid-small">
+        Sign in or create an account with a secure email link. No password
+        needed.
+      </p>
       <div className="paid-actions">
         <Input
           type="email"

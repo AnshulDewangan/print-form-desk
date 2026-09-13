@@ -453,7 +453,11 @@ export default function PaidWorkspace() {
                       . It does not renew automatically.
                     </p>
                   )}
-                  <AuthPanel onChange={() => void refresh()} />
+                  <AuthPanel
+                    onChange={() => {
+                      void refresh().catch((e) => setMessage(e.message));
+                    }}
+                  />
                   <div className="plan-grid">
                     {(Object.keys(PLANS) as PlanId[]).map((id) => (
                       <article className="plan-card" key={id}>

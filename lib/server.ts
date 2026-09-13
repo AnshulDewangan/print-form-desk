@@ -9,6 +9,8 @@ type Runtime = {
   RAZORPAY_WEBHOOK_SECRET?: string;
   BILLING_ENABLED?: string;
   BILLING_MODE?: string;
+  SUPABASE_URL?: string;
+  SUPABASE_ANON_KEY?: string;
 };
 export const runtime = () => env as unknown as Runtime;
 export function database() {
@@ -28,13 +30,12 @@ export async function userId() {
   // These identity headers are provided by the Sites dispatcher, never by form fields.
   // The Sites dev plugin supplies its own local-only test sign-in.
   const h = await headers();
-  const native = h.get('oai-authenticated-user-id');
-  if (native) return native;
   const token = h.get('authorization')?.match(/^Bearer\s+(.+)$/i)?.[1];
-  const r = runtime() as Runtime & {
-    SUPABASE_URL?: string;
-    SUPABASE_ANON_KEY?: string;
-  };
+  const r = runtime();
+  // Once Supabase is configured it is the sole customer identity source.
+  // Signing out must not silently fall back to a different ChatGPT account.
+  if (!r.SUPABASE_URL && !r.SUPABASE_ANON_KEY)
+    return h.get('oai-authenticated-user-id');
   if (!token || !r.SUPABASE_URL || !r.SUPABASE_ANON_KEY) return null;
   try {
     const result = await fetch(`${r.SUPABASE_URL}/auth/v1/user`, {
@@ -46,7 +47,12 @@ export async function userId() {
     });
     if (!result.ok) return null;
     const user = (await result.json()) as { id?: string };
-    return typeof user.id === 'string' ? `supabase:${user.id}` : null;
+    return typeof user.id === 'string' &&
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+        user.id,
+      )
+      ? `supabase:${user.id}`
+      : null;
   } catch {
     return null;
   }

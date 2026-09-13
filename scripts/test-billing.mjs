@@ -327,5 +327,25 @@ await check(
     assert.equal(sql.prepare('SELECT COUNT(*) AS n FROM templates').get().n, 5);
   },
 );
+await check(
+  'Configured Supabase identity never falls back to ChatGPT',
+  async () => {
+    globalThis.testEnv.SUPABASE_URL = 'https://fixture.supabase.co';
+    globalThis.testEnv.SUPABASE_ANON_KEY = 'publishable-fixture';
+    globalThis.testHeaders.set('oai-authenticated-user-id', 'native-user');
+    globalThis.testHeaders.delete('authorization');
+    assert.equal(await server.userId(), null);
+    globalThis.testHeaders.set('authorization', 'Bearer invalid');
+    globalThis.fetch = async () => new Response('{}', { status: 401 });
+    assert.equal(await server.userId(), null);
+    const id = '12345678-1234-1234-1234-123456789abc';
+    globalThis.fetch = async () => Response.json({ id });
+    assert.equal(await server.userId(), `supabase:${id}`);
+    globalThis.fetch = async () => Response.json({ id: '' });
+    assert.equal(await server.userId(), null);
+    globalThis.testHeaders.delete('authorization');
+    assert.equal(await server.userId(), null);
+  },
+);
 sql.close();
 console.log(`${checks} billing and account checks passed.`);
