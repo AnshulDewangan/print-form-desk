@@ -396,7 +396,7 @@ export default function PaidWorkspace() {
               variant={view === 'plans' ? 'default' : 'outline'}
               onClick={() => setView('plans')}
             >
-              Plans & account
+              Plans & billing
             </Button>
             {account?.plan && (
               <span>
@@ -413,9 +413,9 @@ export default function PaidWorkspace() {
           {view === 'plans' ? (
             <section>
               <p>
-                Basic photo, signature and PDF tools remain free. Paid passes
-                add application-pack downloads and templates saved to your
-                account.
+                Basic photo, signature and PDF tools remain free. A 30-day pass
+                adds application-pack downloads and templates saved to your
+                account. Passes do not renew automatically.
               </p>
               {!account ? (
                 <p>Checking account…</p>
@@ -428,11 +428,23 @@ export default function PaidWorkspace() {
                     </p>
                   )}
                   {!account.billingReady && (
-                    <p className="paid-notice">
-                      Paid plans are coming soon. Purchases are not open yet.
-                      You can try the pack preview and keep using all free
-                      tools.
-                    </p>
+                    <section
+                      className="billing-status"
+                      aria-label="Payment status"
+                    >
+                      <span className="billing-badge">Preview mode</span>
+                      <h3>Paid access is not open yet</h3>
+                      <p>
+                        Plans are ready for review, but no payment can be taken.
+                        You can use every free tool and preview an application
+                        pack.
+                      </p>
+                      <p className="paid-small">
+                        When payments open, you will sign in, choose a plan and
+                        complete checkout securely. We will never ask for card
+                        details inside this site.
+                      </p>
+                    </section>
                   )}
                   {account.plan && (
                     <p>
@@ -462,6 +474,7 @@ export default function PaidWorkspace() {
                           )}
                         </ul>
                         <Button
+                          className="plan-cta"
                           disabled={
                             busy ||
                             !account.billingReady ||
@@ -473,7 +486,7 @@ export default function PaidWorkspace() {
                           {account.plan === id
                             ? 'Current plan'
                             : !account.billingReady
-                              ? 'Coming soon'
+                              ? 'Payments not open'
                               : account.plan
                                 ? 'Available after your pass expires'
                                 : `Get ${PLANS[id].name}`}
