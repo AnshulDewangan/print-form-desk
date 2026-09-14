@@ -27,15 +27,9 @@ export class HttpError extends Error {
   }
 }
 export async function userId() {
-  // These identity headers are provided by the Sites dispatcher, never by form fields.
-  // The Sites dev plugin supplies its own local-only test sign-in.
   const h = await headers();
   const token = h.get('authorization')?.match(/^Bearer\s+(.+)$/i)?.[1];
   const r = runtime();
-  // Once Supabase is configured it is the sole customer identity source.
-  // Signing out must not silently fall back to a different ChatGPT account.
-  if (!r.SUPABASE_URL && !r.SUPABASE_ANON_KEY)
-    return h.get('oai-authenticated-user-id');
   if (!token || !r.SUPABASE_URL || !r.SUPABASE_ANON_KEY) return null;
   try {
     const result = await fetch(`${r.SUPABASE_URL}/auth/v1/user`, {
