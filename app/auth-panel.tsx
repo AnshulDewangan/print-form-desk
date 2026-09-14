@@ -59,7 +59,9 @@ export default function AuthPanel({ onChange }: { onChange?: () => void }) {
     try {
       const { error } = await auth.auth.signInWithOAuth({
         provider: 'google',
-        options: { redirectTo: window.location.origin + '/?workspace=plans' },
+        options: {
+          redirectTo: window.location.origin + '/workspace?workspace=plans',
+        },
       });
       if (error) setMessage(error.message);
     } catch {
@@ -80,7 +82,8 @@ export default function AuthPanel({ onChange }: { onChange?: () => void }) {
       const { error } = await auth.auth.signInWithOtp({
         email: clean,
         options: {
-          emailRedirectTo: window.location.origin + '/?workspace=plans',
+          emailRedirectTo:
+            window.location.origin + '/workspace?workspace=plans',
         },
       });
       setMessage(
