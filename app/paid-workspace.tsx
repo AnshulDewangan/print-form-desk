@@ -51,6 +51,11 @@ type Checkout = {
   open: () => void;
   on: (event: string, callback: () => void) => void;
 };
+async function currentUserEmail() {
+  const session = (await (await supabaseBrowser())?.auth.getSession())?.data
+    .session;
+  return session?.user?.email ?? undefined;
+}
 declare global {
   interface Window {
     Razorpay?: new (options: Record<string, unknown>) => Checkout;
@@ -324,6 +329,7 @@ export default function PaidWorkspace() {
       }>('/api/billing/order', { plan });
       if (!window.Razorpay)
         throw new Error('Checkout did not load. Please try again.');
+      const email = await currentUserEmail();
       const checkout = new window.Razorpay({
         key: order.key,
         order_id: order.orderId,
@@ -331,6 +337,19 @@ export default function PaidWorkspace() {
         currency: order.currency,
         name: 'Print & Form Desk',
         description: `${order.name} · 30-day pass${order.testMode ? ' · TEST PAYMENT' : ''}`,
+        prefill: email ? { email, method: 'upi' } : { method: 'upi' },
+        config: {
+          display: {
+            blocks: {
+              upi: {
+                name: 'Pay with UPI',
+                instruments: [{ method: 'upi' }],
+              },
+            },
+            sequence: ['block.upi'],
+            preferences: { show_default_blocks: false },
+          },
+        },
         handler: (payment: Record<string, string>) => {
           void verifyPayment(payment);
         },
