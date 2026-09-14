@@ -11,6 +11,8 @@
     "dev": "vinext dev",
     "build": "vinext build",
     "start": "wrangler dev --config dist/server/wrangler.json",
+    "cf:deploy": "npm run build && wrangler deploy --config dist/server/wrangler.json",
+    "cf:d1:migrate": "wrangler d1 execute print-form-desk-db --file=./drizzle/0000_nifty_mentallo.sql --remote",
     "lint": "oxlint",
     "format": "oxfmt"
   },
