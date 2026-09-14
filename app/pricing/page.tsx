@@ -15,7 +15,8 @@ export default function PricingPage() {
           <h2>Free</h2>
           <p>
             Photo resize, signature resize, image compression, print sheets,
-            images to PDF, merge PDF and extract pages.
+            images to PDF, merge PDF, extract pages, rotate PDF and remove
+            pages.
           </p>
           <strong>₹0</strong>
         </section>
@@ -39,6 +40,11 @@ export default function PricingPage() {
       <p>
         Passes do not renew automatically. Live checkout opens only after the
         merchant account is fully ready.
+      </p>
+      <p>
+        <a href="/?workspace=plans">Open plans & billing</a> to check account
+        access and checkout availability. <a href="/contact">Contact support</a>{' '}
+        for purchase questions.
       </p>
     </InfoPage>
   );

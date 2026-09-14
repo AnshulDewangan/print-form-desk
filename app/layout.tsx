@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import SiteFooter from './site-footer';
 export const metadata: Metadata = {
   title: 'Print & Form Desk — Photo & Signature Workspace',
   description:
@@ -11,7 +12,10 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <div className="site-content">{children}</div>
+        <SiteFooter />
+      </body>
     </html>
   );
 }

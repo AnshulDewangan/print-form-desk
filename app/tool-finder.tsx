@@ -19,9 +19,11 @@ const examples: Record<ToolId, string> = {
 export default function ToolFinder({
   onChoose,
   disabled,
+  onOpenChange,
 }: {
   onChoose: (tool: ToolId) => void;
   disabled: boolean;
+  onOpenChange: (open: boolean) => void;
 }) {
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(true);
@@ -44,7 +46,10 @@ export default function ToolFinder({
         className="finder-toggle"
         aria-expanded={open}
         aria-controls="tool-finder-options"
-        onClick={() => setOpen(!open)}
+        onClick={() => {
+          setOpen(!open);
+          onOpenChange(!open);
+        }}
       >
         <span>
           <strong>What do you need to do?</strong>
@@ -92,6 +97,7 @@ export default function ToolFinder({
                 onClick={() => {
                   onChoose(id);
                   setOpen(false);
+                  onOpenChange(false);
                   setQuery('');
                 }}
               >

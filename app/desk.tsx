@@ -306,6 +306,7 @@ export default function Desk() {
   const [sheetId, setSheetId] = useState<keyof typeof SHEETS>('a4'),
     [view, setView] = useState('prepared'),
     [page, setPage] = useState(0);
+  const [catalogOpen, setCatalogOpen] = useState(true);
   const [pdfSource, setPdfSource] = useState('original'),
     [pageRange, setPageRange] = useState(''),
     [pdfRotation, setPdfRotation] = useState('90'),
@@ -961,12 +962,16 @@ export default function Desk() {
         <PaidWorkspace />
       </header>
       <main className="main">
-        <ToolFinder onChoose={changeTool} disabled={!!busy} />
+        <ToolFinder
+          onChoose={changeTool}
+          disabled={!!busy}
+          onOpenChange={setCatalogOpen}
+        />
         <Tabs
           orientation="vertical"
           value={tool}
           onValueChange={(value) => changeTool(value as ToolId)}
-          className="tool-layout"
+          className={`tool-layout ${catalogOpen ? 'catalog-is-open' : ''}`}
         >
           <aside className="tool-sidebar">
             <p className="nav-heading">CHOOSE A TOOL</p>
@@ -1986,16 +1991,6 @@ export default function Desk() {
                 </section>
               </>
             )}
-            <footer className="workspace-footer">
-              <button onClick={() => setDialog('privacy')}>
-                Privacy & file limits
-              </button>
-              <button onClick={() => setDialog('help')}>Quick guide</button>
-              <a href="/privacy">Privacy</a>
-              <a href="/terms">Terms</a>
-              <a href="/refunds">Refunds</a>
-              <a href="/contact">Contact</a>
-            </footer>
           </TabsContent>
         </Tabs>
       </main>

@@ -30,8 +30,10 @@ export default function PrivacyPage() {
       </p>
       <h2>Contact</h2>
       <p>
-        For privacy or support questions, use the contact page and include only
-        the information needed to understand the issue.
+        For privacy questions or requests concerning your account data, email
+        <a href="mailto:printandform@gmail.com"> printandform@gmail.com</a>.
+        Include your account email and the request; do not include passwords or
+        documents.
       </p>
     </InfoPage>
   );

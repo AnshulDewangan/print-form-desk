@@ -18,6 +18,14 @@ export default function RefundsPage() {
       </p>
       <h2>Information needed</h2>
       <p>
+        Email{' '}
+        <a href="mailto:printandform@gmail.com?subject=Payment%20support">
+          printandform@gmail.com
+        </a>{' '}
+        to request help with a payment. Sending a request does not automatically
+        approve a refund.
+      </p>
+      <p>
         Include your login email, approximate payment time, plan, and Razorpay
         payment ID if available. Do not send card numbers, UPI PINs, passwords
         or OTPs.
