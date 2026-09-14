@@ -1683,3 +1683,132 @@ h1 svg {
     text-align: left;
   }
 }
+
+.tool-finder {
+  margin-bottom: 26px;
+  border: 1px solid #c9dfd5;
+  border-radius: 16px;
+  background: #edf6f1;
+  overflow: hidden;
+}
+.finder-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 24px;
+  text-align: left;
+}
+.finder-toggle strong {
+  display: block;
+  font-size: 20px;
+  letter-spacing: -0.4px;
+}
+.finder-toggle small {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.finder-toggle > span:last-child {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--primary);
+  font-weight: 600;
+}
+.finder-content {
+  padding: 0 24px 24px;
+}
+.finder-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: white;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.finder-search input {
+  width: 100%;
+  min-width: 0;
+  background: transparent;
+}
+.finder-count {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 12px 0;
+}
+.finder-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.finder-grid button {
+  background: white;
+  padding: 16px;
+  text-align: left;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.finder-grid button:hover {
+  border-color: var(--primary);
+  background: #fafffc;
+}
+.finder-grid strong {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 15px;
+}
+.finder-grid span {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.finder-reset {
+  text-decoration: underline;
+  color: var(--primary);
+}
+.journey .complete {
+  color: var(--primary);
+}
+.journey .complete > span {
+  background: #e3f1e9;
+  color: var(--primary);
+}
+@media (max-width: 650px) {
+  .finder-toggle {
+    padding: 16px;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .finder-toggle strong {
+    font-size: 18px;
+  }
+  .finder-content {
+    padding: 0 16px 16px;
+  }
+  .finder-grid {
+    grid-template-columns: 1fr;
+  }
+  .tool-navigation {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    justify-content: flex-start !important;
+    padding-bottom: 8px !important;
+  }
+  .tool-link {
+    flex: 0 0 112px !important;
+    min-height: 76px;
+  }
+  .tool-link:last-child {
+    grid-column: auto;
+  }
+}

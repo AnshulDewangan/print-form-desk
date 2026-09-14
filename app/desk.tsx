@@ -32,6 +32,7 @@ import { Input } from '@/components/ui/input';
 import { Empty } from '@/components/ui/empty';
 import PDFPreview from './pdf-preview';
 import PaidWorkspace from './paid-workspace';
+import ToolFinder from './tool-finder';
 import { Slider } from '@/components/ui/slider';
 import {
   Select,
@@ -925,6 +926,7 @@ export default function Desk() {
         <PaidWorkspace />
       </header>
       <main className="main">
+        <ToolFinder onChoose={changeTool} disabled={!!busy} />
         <Tabs
           orientation="vertical"
           value={tool}
@@ -988,13 +990,22 @@ export default function Desk() {
               </Button>
             </div>
             <ol className="journey" aria-label="How this tool works">
-              <li className="current">
+              <li
+                className={hasFiles ? 'complete' : 'current'}
+                aria-current={!hasFiles ? 'step' : undefined}
+              >
                 <span>1</span> Add {documentTool ? 'PDFs' : 'images'}
               </li>
-              <li className={hasFiles ? 'current' : ''}>
+              <li
+                className={result ? 'complete' : hasFiles ? 'current' : ''}
+                aria-current={hasFiles && !result ? 'step' : undefined}
+              >
                 <span>2</span> Adjust & preview
               </li>
-              <li className={result ? 'current' : ''}>
+              <li
+                className={result ? 'current' : ''}
+                aria-current={result ? 'step' : undefined}
+              >
                 <span>3</span> Download
               </li>
             </ol>
