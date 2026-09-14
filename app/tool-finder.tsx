@@ -24,11 +24,19 @@ export default function ToolFinder({
   disabled: boolean;
 }) {
   const [query, setQuery] = useState('');
-  const [open, setOpen] = useState(false);
-  const matches = (Object.keys(TOOL_INFO) as ToolId[]).filter((id) =>
-    `${TOOL_INFO[id].title} ${TOOL_INFO[id].description} ${examples[id]}`
-      .toLowerCase()
-      .includes(query.trim().toLowerCase()),
+  const [open, setOpen] = useState(true);
+  const [category, setCategory] = useState('All tools');
+  const categories = ['All tools', 'Photos & signatures', 'PDF tools'];
+  const imageTools: ToolId[] = ['photo', 'signature', 'compress', 'sheet'];
+  const matches = (Object.keys(TOOL_INFO) as ToolId[]).filter(
+    (id) =>
+      (category === 'All tools' ||
+        (category === 'Photos & signatures'
+          ? imageTools.includes(id)
+          : !imageTools.includes(id))) &&
+      `${TOOL_INFO[id].title} ${TOOL_INFO[id].description} ${examples[id]}`
+        .toLowerCase()
+        .includes(query.trim().toLowerCase()),
   );
   return (
     <section className="tool-finder" aria-label="Find the right tool">
@@ -43,12 +51,25 @@ export default function ToolFinder({
           <small>Find the right tool for your photo, signature or PDF.</small>
         </span>
         <span>
-          {open ? 'Close guide' : 'Explore all 7 tools'}{' '}
+          {open
+            ? 'Close guide'
+            : `Explore all ${Object.keys(TOOL_INFO).length} tools`}{' '}
           <ArrowRight size={16} />
         </span>
       </button>
       {open && (
         <div id="tool-finder-options" className="finder-content">
+          <div className="finder-categories" aria-label="Tool categories">
+            {categories.map((item) => (
+              <button
+                key={item}
+                aria-pressed={category === item}
+                onClick={() => setCategory(item)}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
           <label className="finder-search">
             <Search size={18} />
             <input
@@ -85,7 +106,13 @@ export default function ToolFinder({
           {!matches.length && (
             <p>
               No matching tool. Try “photo”, “size” or “PDF”.{' '}
-              <button className="finder-reset" onClick={() => setQuery('')}>
+              <button
+                className="finder-reset"
+                onClick={() => {
+                  setQuery('');
+                  setCategory('All tools');
+                }}
+              >
                 Show all tools
               </button>
             </p>

@@ -1789,6 +1789,24 @@ h1 svg {
   text-decoration: underline;
   color: var(--primary);
 }
+.finder-categories {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.finder-categories button {
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  font-size: 14px;
+  background: white;
+}
+.finder-categories button[aria-pressed='true'] {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
 .journey .complete {
   color: var(--primary);
 }
