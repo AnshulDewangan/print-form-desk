@@ -1922,11 +1922,9 @@ export default function Desk() {
             )}
             <footer className="workspace-footer">
               <button onClick={() => setDialog('privacy')}>
-                <ShieldCheck size={16} /> Privacy & file limits
+                Privacy & file limits
               </button>
-              <button onClick={() => setDialog('help')}>
-                <HelpCircle size={16} /> Quick guide
-              </button>
+              <button onClick={() => setDialog('help')}>Quick guide</button>
               <a href="/privacy">Privacy</a>
               <a href="/terms">Terms</a>
               <a href="/refunds">Refunds</a>
