@@ -1,4 +1,4 @@
-import Desk from './desk';
+import Landing from './landing';
 export default function Home() {
-  return <Desk />;
+  return <Landing />;
 }

@@ -42,9 +42,9 @@ export default function PricingPage() {
         merchant account is fully ready.
       </p>
       <p>
-        <a href="/?workspace=plans">Open plans & billing</a> to check account
-        access and checkout availability. <a href="/contact">Contact support</a>{' '}
-        for purchase questions.
+        <a href="/workspace?workspace=plans">Open plans & billing</a> to check
+        account access and checkout availability.{' '}
+        <a href="/contact">Contact support</a> for purchase questions.
       </p>
     </InfoPage>
   );
