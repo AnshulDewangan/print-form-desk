@@ -338,18 +338,6 @@ export default function PaidWorkspace() {
         name: 'Print & Form Desk',
         description: `${order.name} · 30-day pass${order.testMode ? ' · TEST PAYMENT' : ''}`,
         prefill: email ? { email, method: 'upi' } : { method: 'upi' },
-        config: {
-          display: {
-            blocks: {
-              upi: {
-                name: 'Pay with UPI',
-                instruments: [{ method: 'upi' }],
-              },
-            },
-            sequence: ['block.upi'],
-            preferences: { show_default_blocks: false },
-          },
-        },
         handler: (payment: Record<string, string>) => {
           void verifyPayment(payment);
         },
