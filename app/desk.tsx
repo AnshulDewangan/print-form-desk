@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useId, useRef, useState } from 'react';
+import Link from 'next/link';
 import { flushSync } from 'react-dom';
 import {
   ImagePlus,
@@ -32,7 +33,6 @@ import { Input } from '@/components/ui/input';
 import { Empty } from '@/components/ui/empty';
 import PDFPreview from './pdf-preview';
 import PaidWorkspace from './paid-workspace';
-import ToolFinder from './tool-finder';
 import { Slider } from '@/components/ui/slider';
 import {
   Select,
@@ -306,7 +306,6 @@ export default function Desk() {
   const [sheetId, setSheetId] = useState<keyof typeof SHEETS>('a4'),
     [view, setView] = useState('prepared'),
     [page, setPage] = useState(0);
-  const [catalogOpen, setCatalogOpen] = useState(true);
   const [pdfSource, setPdfSource] = useState('original'),
     [pageRange, setPageRange] = useState(''),
     [pdfRotation, setPdfRotation] = useState('90'),
@@ -940,14 +939,14 @@ export default function Desk() {
         Skip to workspace
       </a>
       <header className="topbar">
-        <div className="brand">
+        <Link className="brand" href="/" aria-label="Print & Form Desk home">
           <span className="brand-icon">
             <Printer size={23} />
           </span>
           <span>
             Print & Form <span className="brand-light">Desk</span>
           </span>
-        </div>
+        </Link>
         <span className="privacy">
           <ShieldCheck size={17} /> Your files stay on your device
         </span>
@@ -962,18 +961,16 @@ export default function Desk() {
         <PaidWorkspace />
       </header>
       <main className="main">
-        <ToolFinder
-          onChoose={changeTool}
-          disabled={!!busy}
-          onOpenChange={setCatalogOpen}
-        />
         <Tabs
           orientation="vertical"
           value={tool}
           onValueChange={(value) => changeTool(value as ToolId)}
-          className={`tool-layout ${catalogOpen ? 'catalog-is-open' : ''}`}
+          className="tool-layout"
         >
           <aside className="tool-sidebar">
+            <Link className="workspace-home-link" href="/">
+              ← Home
+            </Link>
             <p className="nav-heading">CHOOSE A TOOL</p>
             <TabsList className="tool-navigation" aria-label="File tools">
               {(Object.keys(TOOL_INFO) as ToolId[]).map((id) => {
