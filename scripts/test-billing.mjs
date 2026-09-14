@@ -84,6 +84,8 @@ globalThis.testEnv = {
   RAZORPAY_KEY_ID: 'rzp_test_fixture',
   RAZORPAY_KEY_SECRET: 'fixture-secret',
   RAZORPAY_WEBHOOK_SECRET: 'webhook-fixture',
+  SUPABASE_URL: 'https://fixture.supabase.co',
+  SUPABASE_ANON_KEY: 'publishable-fixture',
 };
 globalThis.testHeaders = new Headers();
 const { verifySignature, validateCapturedPayment } = await import(
@@ -123,6 +125,26 @@ await check(
     );
   },
 );
+const aliceUuid = '12345678-1234-1234-1234-123456789abc';
+const bobUuid = '12345678-1234-1234-1234-123456789def';
+const aliceId = `supabase:${aliceUuid}`;
+const bobId = `supabase:${bobUuid}`;
+function signIn(user) {
+  if (!user) globalThis.testHeaders.delete('authorization');
+  else globalThis.testHeaders.set('authorization', `Bearer ${user}`);
+}
+function installFetchMock() {
+  globalThis.fetch = async (_url, init) => {
+    const authorization = init?.headers?.Authorization ?? '';
+    if (authorization === 'Bearer alice')
+      return Response.json({ id: aliceUuid });
+    if (authorization === 'Bearer bob') return Response.json({ id: bobUuid });
+    if (authorization.startsWith('Bearer '))
+      return new Response('{}', { status: 401 });
+    return Response.json(payment);
+  };
+}
+installFetchMock();
 const payment = {
   id: 'pay_fixture',
   order_id: 'order_fixture',
@@ -170,7 +192,7 @@ await check(
     );
   },
 );
-globalThis.testHeaders.set('oai-authenticated-user-id', 'alice');
+signIn('alice');
 await check('No paid access and no checkout when disabled', async () => {
   assert.equal(
     (
@@ -181,25 +203,24 @@ await check('No paid access and no checkout when disabled', async () => {
     403,
   );
   assert.equal((await orderRoute.POST(request({ plan: 'shop' }))).status, 503);
-  assert.equal((await server.account('alice')).plan, null);
+  assert.equal((await server.account(aliceId)).plan, null);
 });
 sql
   .prepare(
     'INSERT INTO orders (id,user_id,plan,mode,amount,created_at) VALUES (?,?,?,?,?,?)',
   )
-  .run('order_fixture', 'alice', 'personal', 'test', 4900, Date.now());
-globalThis.fetch = async () => Response.json(payment);
+  .run('order_fixture', aliceId, 'personal', 'test', 4900, Date.now());
 await check('Payment ownership, idempotence and pass activation', async () => {
-  await assert.rejects(() => grantPayment('pay_fixture', 'bob'));
-  await grantPayment('pay_fixture', 'alice');
-  await grantPayment('pay_fixture', 'alice');
+  await assert.rejects(() => grantPayment('pay_fixture', bobId));
+  await grantPayment('pay_fixture', aliceId);
+  await grantPayment('pay_fixture', aliceId);
   assert.equal(sql.prepare('SELECT COUNT(*) AS n FROM grants').get().n, 1);
-  assert.equal((await server.account('alice')).plan, 'personal');
-  assert.equal((await server.account('bob')).plan, null);
+  assert.equal((await server.account(aliceId)).plan, 'personal');
+  assert.equal((await server.account(bobId)).plan, null);
 });
 await check('Test purchases never unlock live mode', async () => {
   globalThis.testEnv.BILLING_MODE = 'live';
-  assert.equal((await server.account('alice')).plan, null);
+  assert.equal((await server.account(aliceId)).plan, null);
   assert.equal(server.billingReady(), false);
   globalThis.testEnv.BILLING_MODE = 'test';
 });
@@ -241,7 +262,7 @@ await check(
       .prepare(
         'INSERT INTO orders (id,user_id,plan,mode,amount,created_at) VALUES (?,?,?,?,?,?)',
       )
-      .run('order_bob', 'bob', 'shop', 'test', 19900, Date.now());
+      .run('order_bob', bobId, 'shop', 'test', 19900, Date.now());
     sql
       .prepare(
         'INSERT INTO grants (payment_id,order_id,user_id,plan,mode,expires_at) VALUES (?,?,?,?,?,?)',
@@ -249,12 +270,12 @@ await check(
       .run(
         'pay_bob',
         'order_bob',
-        'bob',
+        bobId,
         'shop',
         'test',
         Date.now() + 86400000,
       );
-    globalThis.testHeaders.set('oai-authenticated-user-id', 'bob');
+    signIn('bob');
     assert.equal(
       (await (await templateRoute.GET()).json()).templates.length,
       0,
@@ -268,7 +289,7 @@ await check(
       200,
     );
     assert.equal(sql.prepare('SELECT COUNT(*) AS n FROM templates').get().n, 5);
-    globalThis.testHeaders.set('oai-authenticated-user-id', 'alice');
+    signIn('alice');
   },
 );
 await check('Webhook signatures and duplicate captured events', async () => {
@@ -307,7 +328,7 @@ await check('Webhook signatures and duplicate captured events', async () => {
   assert.equal(
     sql
       .prepare('SELECT COUNT(*) AS n FROM grants WHERE user_id = ?')
-      .get('alice').n,
+      .get(aliceId).n,
     1,
   );
 });
@@ -317,13 +338,13 @@ await check(
     sql
       .prepare('UPDATE orders SET refunded = 1 WHERE id = ?')
       .run('order_fixture');
-    assert.equal((await server.account('alice')).plan, null);
-    await assert.rejects(() => grantPayment('pay_fixture', 'alice'));
+    assert.equal((await server.account(aliceId)).plan, null);
+    await assert.rejects(() => grantPayment('pay_fixture', aliceId));
     sql
       .prepare('UPDATE orders SET refunded = 0 WHERE id = ?')
       .run('order_fixture');
     sql.prepare('UPDATE grants SET expires_at = ?').run(Date.now() - 1);
-    assert.equal((await server.account('alice')).plan, null);
+    assert.equal((await server.account(aliceId)).plan, null);
     assert.equal(sql.prepare('SELECT COUNT(*) AS n FROM templates').get().n, 5);
   },
 );

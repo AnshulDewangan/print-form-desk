@@ -1554,3 +1554,132 @@ h1 svg {
     flex: 1;
   }
 }
+
+.top-links {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-left: auto;
+  font-size: 14px;
+  color: #405a4d;
+}
+.top-links a,
+.workspace-footer a,
+.static-back {
+  text-decoration: none;
+  color: #0f684c;
+  font-weight: 600;
+}
+.top-links a:hover,
+.workspace-footer a:hover,
+.static-back:hover {
+  text-decoration: underline;
+}
+.static-page {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 42px 24px 70px;
+}
+.static-page h1 {
+  display: block;
+  font-size: clamp(32px, 5vw, 54px);
+  line-height: 1.05;
+  margin: 8px 0 22px;
+}
+.static-copy {
+  display: grid;
+  gap: 18px;
+  color: #31473f;
+  font-size: 17px;
+  line-height: 1.75;
+}
+.static-copy h2 {
+  margin-top: 14px;
+  font-size: 23px;
+  color: #20342e;
+}
+.static-copy ul {
+  margin: 0;
+  padding-left: 22px;
+}
+.static-plan-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.static-plan-grid section {
+  border: 1px solid #d8e3de;
+  border-radius: 14px;
+  background: #fff;
+  padding: 18px;
+}
+.static-plan-grid strong {
+  display: block;
+  margin-top: 12px;
+  color: #0f684c;
+  font-size: 20px;
+}
+.account-summary,
+.billing-history {
+  border: 1px solid #d8e3dd;
+  border-radius: 12px;
+  background: #fff;
+  padding: 16px;
+  margin: 16px 0;
+}
+.account-summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+}
+.account-summary h3 {
+  font-size: 22px;
+  margin: 8px 0 4px;
+}
+.account-summary strong {
+  display: block;
+  font-size: 28px;
+  color: #0f684c;
+  text-align: right;
+}
+.account-summary span:last-child {
+  color: #52635a;
+  font-size: 14px;
+}
+.billing-history h3 {
+  margin-bottom: 10px;
+}
+.billing-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 12px;
+  align-items: center;
+  border-top: 1px solid #e4ece8;
+  padding: 10px 0;
+  font-size: 14px;
+}
+.billing-row small {
+  display: block;
+  color: #64766d;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 760px) {
+  .top-links {
+    order: 4;
+    width: 100%;
+    margin-left: 0;
+    justify-content: center;
+  }
+  .static-plan-grid,
+  .billing-row {
+    grid-template-columns: 1fr;
+  }
+  .account-summary {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .account-summary strong {
+    text-align: left;
+  }
+}

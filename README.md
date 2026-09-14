@@ -25,7 +25,7 @@ The embedded testing browser did not emit a native download event for blob links
 
 PDF viewer assets are copied from the installed pdfjs-dist version by predev/prebuild. They are served from this site rather than an external CDN. `scripts/browser-fixtures.mjs` creates synthetic local QA files in ignored `work/qa/`.
 
-This beta is intended for private review. Purchases are disabled until the owner connects and tests a merchant account. Actual Razorpay checkout and webhook delivery have not been tested against a merchant account.
+The Cloudflare deployment includes Supabase sign-in, D1-backed templates and Razorpay test-mode checkout wiring. Keep live purchases closed until Razorpay onboarding, UPI/payment-method activation, live keys, webhook verification, refund handling and support/legal details are checked end to end.
 
 ## Paid workspace
 

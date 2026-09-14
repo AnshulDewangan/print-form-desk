@@ -914,6 +914,11 @@ export default function Desk() {
         <span className="privacy">
           <ShieldCheck size={17} /> Your files stay on your device
         </span>
+        <nav className="top-links" aria-label="Product pages">
+          <a href="/pricing">Pricing</a>
+          <a href="/about">About</a>
+          <a href="/contact">Support</a>
+        </nav>
         <Button variant="ghost" onClick={() => setDialog('help')}>
           <HelpCircle size={17} /> Help
         </Button>
@@ -1911,6 +1916,10 @@ export default function Desk() {
               <button onClick={() => setDialog('help')}>
                 <HelpCircle size={16} /> Quick guide
               </button>
+              <a href="/privacy">Privacy</a>
+              <a href="/terms">Terms</a>
+              <a href="/refunds">Refunds</a>
+              <a href="/contact">Contact</a>
             </footer>
           </TabsContent>
         </Tabs>

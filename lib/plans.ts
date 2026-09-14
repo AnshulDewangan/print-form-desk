@@ -25,4 +25,14 @@ export type Account = {
   billingReady: boolean;
   testMode: boolean;
   storageReady: boolean;
+  templatesUsed: number;
+  templateLimit: number | null;
+  orders: {
+    id: string;
+    plan: PlanId;
+    amount: number;
+    createdAt: number;
+    refunded: boolean;
+    active: boolean;
+  }[];
 };

@@ -77,17 +77,64 @@ export async function account(id: string | null): Promise<Account> {
     billingReady: billingReady(),
     testMode: billingMode() === 'test',
     storageReady: !!runtime().DB,
+    templatesUsed: 0,
+    templateLimit: null,
+    orders: [],
   };
   if (!id || !runtime().DB) return base;
+  const templateRow = await database()
+    .prepare('SELECT COUNT(*) AS n FROM templates WHERE user_id = ?')
+    .bind(id)
+    .first<{ n: number }>();
+  const orderRows = await database()
+    .prepare(
+      'SELECT o.id, o.plan, o.amount, o.created_at, o.refunded, g.expires_at FROM orders o LEFT JOIN grants g ON g.order_id = o.id WHERE o.user_id = ? AND o.mode = ? ORDER BY o.created_at DESC LIMIT 5',
+    )
+    .bind(id, billingMode())
+    .all<{
+      id: string;
+      plan: string;
+      amount: number;
+      created_at: number;
+      refunded: number;
+      expires_at: number | null;
+    }>();
   const row = await database()
     .prepare(
       "SELECT g.plan, g.expires_at FROM grants g JOIN orders o ON o.id = g.order_id WHERE g.user_id = ? AND g.mode = ? AND g.expires_at > ? AND o.refunded = 0 ORDER BY CASE g.plan WHEN 'shop' THEN 0 ELSE 1 END, g.expires_at DESC LIMIT 1",
     )
     .bind(id, billingMode(), Date.now())
     .first<{ plan: string; expires_at: number }>();
+  const orders = orderRows.results.flatMap((order) =>
+    isPlan(order.plan)
+      ? [
+          {
+            id: order.id,
+            plan: order.plan,
+            amount: order.amount,
+            createdAt: order.created_at,
+            refunded: order.refunded === 1,
+            active:
+              order.refunded !== 1 &&
+              typeof order.expires_at === 'number' &&
+              order.expires_at > Date.now(),
+          },
+        ]
+      : [],
+  );
+  const accountBase = {
+    ...base,
+    templatesUsed: templateRow?.n ?? 0,
+    orders,
+  };
   if (row && isPlan(row.plan))
-    return { ...base, plan: row.plan, expiresAt: row.expires_at };
-  return base;
+    return {
+      ...accountBase,
+      plan: row.plan,
+      expiresAt: row.expires_at,
+      templateLimit: PLANS[row.plan].templates,
+    };
+  return accountBase;
 }
 export async function paidUser() {
   const id = await requireUser(),

@@ -466,11 +466,28 @@ export default function PaidWorkspace() {
                     </section>
                   )}
                   {account.plan && (
-                    <p>
-                      Your {PLANS[account.plan].name} pass expires{' '}
-                      {new Date(account.expiresAt!).toLocaleDateString('en-IN')}
-                      . It does not renew automatically.
-                    </p>
+                    <section className="account-summary">
+                      <div>
+                        <span className="billing-badge">Active pass</span>
+                        <h3>{PLANS[account.plan].name}</h3>
+                        <p>
+                          Expires{' '}
+                          {new Date(account.expiresAt!).toLocaleDateString(
+                            'en-IN',
+                          )}
+                          . It does not renew automatically.
+                        </p>
+                      </div>
+                      <div>
+                        <strong>
+                          {account.templatesUsed}
+                          {account.templateLimit
+                            ? ` / ${account.templateLimit}`
+                            : ''}
+                        </strong>
+                        <span>saved templates</span>
+                      </div>
+                    </section>
                   )}
                   <AuthPanel
                     onChange={() => {
@@ -523,6 +540,32 @@ export default function PaidWorkspace() {
                     to use them. Files are processed on this device and are
                     never stored in your account.
                   </p>
+                  {account.orders.length > 0 && (
+                    <section className="billing-history">
+                      <h3>Recent billing activity</h3>
+                      {account.orders.map((order) => (
+                        <div className="billing-row" key={order.id}>
+                          <span>
+                            <strong>{PLANS[order.plan].name}</strong>
+                            <small>
+                              {new Date(order.createdAt).toLocaleDateString(
+                                'en-IN',
+                              )}{' '}
+                              · {order.id}
+                            </small>
+                          </span>
+                          <span>₹{order.amount / 100}</span>
+                          <span>
+                            {order.refunded
+                              ? 'Refunded'
+                              : order.active
+                                ? 'Active'
+                                : 'Inactive'}
+                          </span>
+                        </div>
+                      ))}
+                    </section>
+                  )}
                   <Button
                     variant="outline"
                     disabled={busy}
