@@ -6,7 +6,9 @@ export type ToolId =
   | 'sheet'
   | 'pdf'
   | 'merge'
-  | 'extract';
+  | 'extract'
+  | 'rotatePdf'
+  | 'removePages';
 export const TOOL_INFO = {
   photo: {
     title: 'Photo resizer',
@@ -63,6 +65,22 @@ export const TOOL_INFO = {
     action: 'Prepare selected pages',
     accept: 'Choose a PDF',
     hint: 'Choose one PDF, then enter the page numbers you want to keep.',
+  },
+  rotatePdf: {
+    title: 'Rotate PDF',
+    short: 'Rotate PDF',
+    description: 'Turn sideways or upside-down PDF pages.',
+    action: 'Prepare rotated PDF',
+    accept: 'Choose a PDF',
+    hint: 'Choose a PDF, select the pages to turn and pick a direction.',
+  },
+  removePages: {
+    title: 'Remove PDF pages',
+    short: 'Remove pages',
+    description: 'Delete unwanted pages from a PDF.',
+    action: 'Prepare cleaned PDF',
+    accept: 'Choose a PDF',
+    hint: 'Enter the pages you want to remove. Your original file stays unchanged.',
   },
 } as const;
 export function initialSettings(

@@ -100,6 +100,8 @@ const ICONS = {
   pdf: FileText,
   merge: Combine,
   extract: Scissors,
+  rotatePdf: RotateCw,
+  removePages: Trash2,
 };
 const STORAGE = 'print-form-desk.presets.v1';
 type Result = {
@@ -306,6 +308,7 @@ export default function Desk() {
     [page, setPage] = useState(0);
   const [pdfSource, setPdfSource] = useState('original'),
     [pageRange, setPageRange] = useState(''),
+    [pdfRotation, setPdfRotation] = useState('90'),
     [rangeError, setRangeError] = useState('');
   const [busy, setBusy] = useState(''),
     [error, setError] = useState(''),
@@ -332,7 +335,11 @@ export default function Desk() {
     tool,
   });
   state.current = { assets, selected, pdfs, pdfSelected, busy, result, tool };
-  const documentTool = tool === 'merge' || tool === 'extract',
+  const documentTool =
+      tool === 'merge' ||
+      tool === 'extract' ||
+      tool === 'rotatePdf' ||
+      tool === 'removePages',
     info = TOOL_INFO[tool],
     presets = [...PRESETS, ...saved];
   const active = assets.find((a) => a.id === selected) ?? assets[0],
@@ -581,10 +588,11 @@ export default function Desk() {
       documents: PDFAsset[] = [],
       errors: string[] = [];
     try {
-      const limit = documentTool ? 12 - pdfs.length : 30 - assets.length;
+      const pdfLimit = tool === 'merge' ? 12 : 1;
+      const limit = documentTool ? pdfLimit - pdfs.length : 30 - assets.length;
       if (files.length > limit)
         errors.push(
-          `This workspace accepts ${documentTool ? '12 PDFs' : '30 images'}. Extra files were skipped.`,
+          `This workspace accepts ${documentTool ? (tool === 'merge' ? '12 PDFs' : 'one PDF') : '30 images'}. Extra files were skipped.`,
         );
       let pixels = assets.reduce(
           (n, a) => n + a.image.naturalWidth * a.image.naturalHeight,
@@ -798,25 +806,52 @@ export default function Desk() {
     try {
       let blob: Blob, name: string, description: string;
       if (documentTool) {
-        const { combinePDFs, parsePages } = await import('@/lib/pdf-tools');
+        const { combinePDFs, parsePages, rotatePDF, removePDFPages } =
+          await import('@/lib/pdf-tools');
         if (tool === 'merge' && pdfs.length < 2)
           throw new Error('Add at least two PDFs to merge.');
         let indices: number[] | undefined;
-        if (tool === 'extract') {
+        if (tool !== 'merge') {
           try {
+            if (tool === 'removePages' && !pageRange.trim())
+              throw new Error('Enter at least one page to remove.');
             indices = parsePages(pageRange, activePDF.pages);
           } catch (e) {
             setRangeError((e as Error).message);
             throw e;
           }
         }
-        const bytes = await combinePDFs(
-          tool === 'extract' ? [activePDF] : pdfs,
-          indices,
-        );
+        const bytes =
+          tool === 'rotatePdf'
+            ? await rotatePDF(
+                activePDF.bytes,
+                indices!,
+                Number(pdfRotation) as 90 | 180 | 270,
+              )
+            : tool === 'removePages'
+              ? await removePDFPages(activePDF.bytes, indices!)
+              : await combinePDFs(
+                  tool === 'extract' ? [activePDF] : pdfs,
+                  indices,
+                );
         blob = new Blob([bytes as BlobPart], { type: 'application/pdf' });
-        name = tool === 'merge' ? 'merged-document.pdf' : 'selected-pages.pdf';
-        description = `${tool === 'extract' ? indices!.length : pdfs.reduce((n, p) => n + p.pages, 0)} pages · PDF`;
+        name =
+          tool === 'merge'
+            ? 'merged-document.pdf'
+            : tool === 'rotatePdf'
+              ? 'rotated-document.pdf'
+              : tool === 'removePages'
+                ? 'cleaned-document.pdf'
+                : 'selected-pages.pdf';
+        const outputPages =
+          tool === 'removePages'
+            ? activePDF.pages - indices!.length
+            : tool === 'extract'
+              ? indices!.length
+              : tool === 'rotatePdf'
+                ? activePDF.pages
+                : pdfs.reduce((n, p) => n + p.pages, 0);
+        description = `${outputPages} pages · PDF`;
       } else {
         if (tool === 'sheet' && layoutError) throw new Error(layoutError);
         const multi = batch || tool === 'sheet' || tool === 'pdf',
@@ -1395,7 +1430,11 @@ export default function Desk() {
                           <h3>
                             {tool === 'merge'
                               ? 'Merge settings'
-                              : 'Choose pages to save'}
+                              : tool === 'rotatePdf'
+                                ? 'Rotate pages'
+                                : tool === 'removePages'
+                                  ? 'Choose pages to remove'
+                                  : 'Choose pages to save'}
                           </h3>
                           {tool === 'merge' ? (
                             <>
@@ -1418,7 +1457,11 @@ export default function Desk() {
                             <>
                               <label className="field">
                                 <span className="field-label">
-                                  Pages to include
+                                  {tool === 'removePages'
+                                    ? 'Pages to remove'
+                                    : tool === 'rotatePdf'
+                                      ? 'Pages to rotate'
+                                      : 'Pages to include'}
                                 </span>
                                 <Input
                                   value={pageRange}
@@ -1433,11 +1476,30 @@ export default function Desk() {
                                 />
                               </label>
                               <p id="page-range-help" className="field-help">
-                                Leave blank to keep all {activePDF.pages} pages.
-                                Enter numbers or ranges separated by commas.
+                                {tool === 'removePages'
+                                  ? `This PDF has ${activePDF.pages} pages. Enter numbers or ranges separated by commas.`
+                                  : `Leave blank to use all ${activePDF.pages} pages. Enter numbers or ranges separated by commas.`}
                               </p>
                               {rangeError && (
                                 <p className="input-error">{rangeError}</p>
+                              )}
+                              {tool === 'rotatePdf' && (
+                                <Choice
+                                  label="Turn pages"
+                                  value={pdfRotation}
+                                  options={[
+                                    { value: '90', label: '90° clockwise' },
+                                    { value: '180', label: '180° upside down' },
+                                    {
+                                      value: '270',
+                                      label: '90° anticlockwise',
+                                    },
+                                  ]}
+                                  onChange={(value) => {
+                                    setPdfRotation(value);
+                                    invalidate();
+                                  }}
+                                />
                               )}
                               <p className="inline-tip">
                                 Creates a new PDF. Your original PDF is
@@ -1823,7 +1885,11 @@ export default function Desk() {
                         : documentTool
                           ? tool === 'merge'
                             ? 'Combine the PDFs above into one file.'
-                            : 'Save the chosen pages as a new PDF.'
+                            : tool === 'rotatePdf'
+                              ? 'Turn the chosen pages and save a new PDF.'
+                              : tool === 'removePages'
+                                ? 'Delete the chosen pages and save a new PDF.'
+                                : 'Save the chosen pages as a new PDF.'
                           : tool === 'sheet'
                             ? 'Create a PDF with every photo and its copy count.'
                             : tool === 'pdf'

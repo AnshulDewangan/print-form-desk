@@ -1,4 +1,4 @@
-import { PDFDocument } from 'pdf-lib';
+import { degrees, PDFDocument } from 'pdf-lib';
 export type PDFAsset = {
   id: string;
   name: string;
@@ -63,6 +63,31 @@ export async function combinePDFs(
     for (const page of await output.copyPages(source, indices))
       output.addPage(page);
   }
+  output.setTitle('Print & Form Desk');
+  return output.save();
+}
+
+export async function rotatePDF(
+  bytes: Uint8Array,
+  indices: number[],
+  angle: 90 | 180 | 270,
+) {
+  const document = await PDFDocument.load(bytes);
+  for (const index of indices) {
+    const page = document.getPage(index);
+    page.setRotation(degrees((page.getRotation().angle + angle) % 360));
+  }
+  return document.save();
+}
+
+export async function removePDFPages(bytes: Uint8Array, indices: number[]) {
+  const source = await PDFDocument.load(bytes);
+  const removed = new Set(indices);
+  const keep = source.getPageIndices().filter((index) => !removed.has(index));
+  if (!keep.length)
+    throw new Error('You must keep at least one page in the PDF.');
+  const output = await PDFDocument.create();
+  for (const page of await output.copyPages(source, keep)) output.addPage(page);
   output.setTitle('Print & Form Desk');
   return output.save();
 }

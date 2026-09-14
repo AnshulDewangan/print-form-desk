@@ -35,7 +35,7 @@ const { DEFAULT, arrange, cropRect, validateSettings, SHEETS } =
 const { printPDF, imagePDF } = await import('../work/test-build/pdf.js');
 const { filename } = await import('../work/test-build/images.js');
 const { compressToLimit } = await import('../work/test-build/compression.js');
-const { parsePages, inspectPDF, combinePDFs } =
+const { parsePages, inspectPDF, combinePDFs, rotatePDF, removePDFPages } =
   await import('../work/test-build/pdf-tools.js');
 const { initialSettings, moveItem } =
   await import('../work/test-build/workflow.js');
@@ -244,6 +244,22 @@ check(
       extracted.getPages().map((p) => p.getWidth()),
       [400, 200],
     ),
+);
+const rotated = await PDFDocument.load(await rotatePDF(firstBytes, [1], 90));
+check('rotation changes only the selected PDF pages', () =>
+  assert.deepEqual(
+    rotated.getPages().map((p) => p.getRotation().angle),
+    [0, 90],
+  ),
+);
+const cleaned = await PDFDocument.load(await removePDFPages(firstBytes, [0]));
+check('page removal keeps the remaining PDF pages', () => {
+  assert.equal(cleaned.getPageCount(), 1);
+  assert.equal(cleaned.getPage(0).getWidth(), 400);
+});
+await assert.rejects(
+  () => removePDFPages(firstBytes, [0, 1]),
+  /keep at least one/,
 );
 await assert.rejects(
   () => inspectPDF(new Uint8Array([0, 1, 2, 3])),

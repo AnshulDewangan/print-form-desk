@@ -12,6 +12,8 @@ const examples: Record<ToolId, string> = {
   pdf: 'Turn document photos into a single PDF',
   merge: 'Combine certificates and documents into one PDF',
   extract: 'Keep only the pages you need · split a PDF',
+  rotatePdf: 'Turn one page or the whole PDF left or right',
+  removePages: 'Delete blank or unwanted pages from a PDF',
 };
 
 export default function ToolFinder({
