@@ -120,6 +120,7 @@ export default function PaidWorkspace() {
   const [open, setOpen] = useState(false),
     [view, setView] = useState<'pack' | 'plans'>('pack');
   const [account, setAccount] = useState<Account | null>(null);
+  const [trialRemaining, setTrialRemaining] = useState<number | null>(null);
   const [message, setMessage] = useState(''),
     [busy, setBusy] = useState(false);
   const [settings, setSettings] = useState<PackSettings>(
@@ -179,6 +180,10 @@ export default function PaidWorkspace() {
   async function refresh() {
     const next = await api<Account>('/api/account');
     setAccount(next);
+    if (next.signedIn && !next.plan) {
+      const trial = await api<{ remaining: number }>('/api/pack-trial');
+      setTrialRemaining(trial.remaining);
+    } else setTrialRemaining(null);
     if (next.plan) {
       const saved = await api<{ templates: Template[] }>('/api/templates');
       setTemplates(saved.templates);
@@ -233,10 +238,10 @@ export default function PaidWorkspace() {
       if (!files.photo || !files.signature)
         throw new Error('Choose both a photo and a signature.');
       const a = await refresh();
-      if (!a.plan) {
+      if (!a.signedIn) {
         setView('plans');
         throw new Error(
-          'A Personal or Shop pass is required to download application packs. You can keep trying the preview.',
+          'Sign in to get three free application packs. No payment required.',
         );
       }
       const { zipSync, strToU8 } = await import('fflate');
@@ -266,6 +271,15 @@ export default function PaidWorkspace() {
       const blob = new Blob([zipSync(entries, { level: 0 }) as BlobPart], {
         type: 'application/zip',
       });
+      if (!a.plan) {
+        try {
+          const trial = await api<{ remaining: number }>('/api/pack-trial', {});
+          setTrialRemaining(trial.remaining);
+        } catch (error) {
+          setView('plans');
+          throw error;
+        }
+      }
       setResult({
         url: URL.createObjectURL(blob),
         name: `${safeJobName(job)}.zip`,
@@ -388,7 +402,7 @@ export default function PaidWorkspace() {
   return (
     <>
       <Button variant="outline" onClick={() => setOpen(true)}>
-        Application packs & plans
+        Packs & plans
       </Button>
       <Dialog
         open={open}
@@ -440,6 +454,11 @@ export default function PaidWorkspace() {
                 <p>Checking account…</p>
               ) : (
                 <>
+                  {!account.plan && <section className="support-contact">
+                    <h3>{account.signedIn ? `${trialRemaining ?? '…'} free packs remaining` : 'Try 3 packs free'}</h3>
+                    <p>One ZIP combines your photo, signature and supporting files. Sign in to try three packs with no card. Upgrade only when you need more.</p>
+                    <Button onClick={() => setView('pack')}>Create a pack</Button>
+                  </section>}
                   {account.testMode && account.billingReady && (
                     <p className="paid-notice">
                       Test checkout only. No real money is collected and test
@@ -839,7 +858,11 @@ export default function PaidWorkspace() {
                 </div>
                 {!account?.plan && (
                   <p className="paid-small">
-                    Preview is free. Downloading packs requires a paid pass.
+                    {account?.signedIn
+                      ? trialRemaining === null
+                        ? 'Checking your free allowance…'
+                        : `${trialRemaining} of 3 free packs remaining. One prepared ZIP uses one pack. Re-downloading it does not use another.`
+                      : 'Sign in for 3 free packs. No card needed. Each pack includes a photo, signature and supporting files.'}
                   </p>
                 )}
               </fieldset>

@@ -1,0 +1,14 @@
+import { DatabaseSync } from 'node:sqlite';
+import { readFileSync } from 'node:fs';
+import assert from 'node:assert/strict';
+const db = new DatabaseSync(':memory:');
+db.exec(readFileSync(new URL('../drizzle/0001_pack_trial.sql', import.meta.url), 'utf8'));
+const source = readFileSync(new URL('../app/api/pack-trial/route.ts', import.meta.url), 'utf8');
+const sql = source.match(/'INSERT INTO pack_trial_usage[^']+'/)[0].slice(1, -1);
+const consume = db.prepare(sql);
+for (let used = 1; used <= 3; used++) assert.equal(consume.get('alice').used, used);
+assert.equal(consume.get('alice'), undefined);
+assert.equal(consume.get('bob').used, 1);
+assert.equal(db.prepare('SELECT used FROM pack_trial_usage WHERE user_id = ?').get('alice').used, 3);
+console.log('PASS three-pack cap, rejection after limit, and independent account allowance');
+db.close();
