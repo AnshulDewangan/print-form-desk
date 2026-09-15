@@ -454,11 +454,23 @@ export default function PaidWorkspace() {
                 <p>Checking account…</p>
               ) : (
                 <>
-                  {!account.plan && <section className="support-contact">
-                    <h3>{account.signedIn ? `${trialRemaining ?? '…'} free packs remaining` : 'Try 3 packs free'}</h3>
-                    <p>One ZIP combines your photo, signature and supporting files. Sign in to try three packs with no card. Upgrade only when you need more.</p>
-                    <Button onClick={() => setView('pack')}>Create a pack</Button>
-                  </section>}
+                  {!account.plan && (
+                    <section className="support-contact">
+                      <h3>
+                        {account.signedIn
+                          ? `${trialRemaining ?? '…'} free packs remaining`
+                          : 'Try 3 packs free'}
+                      </h3>
+                      <p>
+                        One ZIP combines your photo, signature and supporting
+                        files. Sign in to try three packs with no card. Upgrade
+                        only when you need more.
+                      </p>
+                      <Button onClick={() => setView('pack')}>
+                        Create a pack
+                      </Button>
+                    </section>
+                  )}
                   {account.testMode && account.billingReady && (
                     <p className="paid-notice">
                       Test checkout only. No real money is collected and test
@@ -514,6 +526,26 @@ export default function PaidWorkspace() {
                     }}
                   />
                   <div className="plan-grid">
+                    <article className="plan-card">
+                      <h3>Free</h3>
+                      <p>Try the tools and prepare your first applications.</p>
+                      <p className="plan-price">
+                        ₹0<span> / no payment needed</span>
+                      </p>
+                      <ul>
+                        <li>All 9 standard tools</li>
+                        <li>3 application packs per account, once</li>
+                        <li>Save custom image sizes in this browser</li>
+                        <li>No card required</li>
+                      </ul>
+                      <Button
+                        className="plan-cta"
+                        variant="outline"
+                        onClick={() => setView('pack')}
+                      >
+                        Try a free pack
+                      </Button>
+                    </article>
                     {(Object.keys(PLANS) as PlanId[]).map((id) => (
                       <article className="plan-card" key={id}>
                         <h3>{PLANS[id].name}</h3>
@@ -523,7 +555,7 @@ export default function PaidWorkspace() {
                           <span> / 30 days</span>
                         </p>
                         <ul>
-                          <li>Photo + signature application packs</li>
+                          <li>Application packs throughout your 30-day pass</li>
                           <li>Include up to 5 original documents</li>
                           <li>
                             {PLANS[id].templates} templates saved across devices
@@ -548,7 +580,9 @@ export default function PaidWorkspace() {
                               ? 'Payments not open'
                               : account.plan
                                 ? 'Available after your pass expires'
-                                : `Get ${PLANS[id].name}`}
+                                : !account.signedIn
+                                  ? 'Sign in to purchase'
+                                  : `Get ${PLANS[id].name}`}
                         </Button>
                       </article>
                     ))}

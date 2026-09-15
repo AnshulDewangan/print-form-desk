@@ -65,6 +65,73 @@ export default function PricingPage() {
         merchant account is fully ready.
       </p>
       <h2>What happens after my free packs?</h2>
+      <div
+        className="plan-comparison"
+        role="region"
+        aria-label="Compare plans"
+        tabIndex={0}
+      >
+        <table>
+          <caption>Compare Free, Personal Premium and Shop Premium</caption>
+          <thead>
+            <tr>
+              <th scope="col">Included</th>
+              <th scope="col">Free</th>
+              <th scope="col">{PLANS.personal.name}</th>
+              <th scope="col">{PLANS.shop.name}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Price</th>
+              <td>₹0</td>
+              <td>₹{PLANS.personal.amount / 100} for 30 days</td>
+              <td>₹{PLANS.shop.amount / 100} for 30 days</td>
+            </tr>
+            <tr>
+              <th scope="row">9 standard photo and PDF tools</th>
+              <td>Included</td>
+              <td>Included</td>
+              <td>Included</td>
+            </tr>
+            <tr>
+              <th scope="row">Application ZIP packs</th>
+              <td>3 per account, once</td>
+              <td>Throughout the pass</td>
+              <td>Throughout the pass</td>
+            </tr>
+            <tr>
+              <th scope="row">Supporting files per pack</th>
+              <td>Up to 5</td>
+              <td>Up to 5</td>
+              <td>Up to 5</td>
+            </tr>
+            <tr>
+              <th scope="row">Account templates</th>
+              <td>Not included</td>
+              <td>{PLANS.personal.templates}</td>
+              <td>{PLANS.shop.templates}</td>
+            </tr>
+            <tr>
+              <th scope="row">Next-customer reset retaining settings</th>
+              <td>Not included</td>
+              <td>Not included</td>
+              <td>Included</td>
+            </tr>
+            <tr>
+              <th scope="row">Automatic renewal</th>
+              <td>No</td>
+              <td>No</td>
+              <td>No</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        File-size and browser memory limits apply to every plan. These are
+        single-account passes. Paid access does not add office conversions, OCR
+        or AI tools.
+      </p>
       <p>
         Your standard tools continue to work. Creating another application pack
         requires a Personal or Shop pass. Personal suits individual

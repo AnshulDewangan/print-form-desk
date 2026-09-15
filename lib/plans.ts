@@ -1,13 +1,13 @@
 export const PLANS = {
   personal: {
-    name: 'Personal',
+    name: 'Personal Premium',
     amount: 4900,
     days: 30,
     templates: 5,
     description: 'For your own applications',
   },
   shop: {
-    name: 'Shop',
+    name: 'Shop Premium',
     amount: 19900,
     days: 30,
     templates: 50,

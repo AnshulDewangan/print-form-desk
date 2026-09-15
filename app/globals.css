@@ -50,6 +50,31 @@ body {
   flex: 1 0 auto;
   width: 100%;
 }
+.plan-comparison {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.plan-comparison table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 620px;
+  font-size: 14px;
+}
+.plan-comparison caption {
+  text-align: left;
+  padding: 16px;
+  font-weight: 700;
+}
+.plan-comparison th,
+.plan-comparison td {
+  padding: 14px;
+  text-align: left;
+  border-top: 1px solid var(--border);
+}
+.plan-comparison thead {
+  background: #e8f2ee;
+}
 .landing {
   max-width: 1280px;
   margin: 0 auto;
