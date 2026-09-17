@@ -294,6 +294,23 @@ function Step({
 }
 
 export default function Desk() {
+  const assistantSettings = useRef<Partial<Settings>>({});
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
+    const requested = query.get('assist');
+    if (!requested || !Object.prototype.hasOwnProperty.call(TOOL_INFO, requested)) return;
+    setTool(requested as ToolId);
+    setPresetId('custom');
+    const patch: Partial<Settings> = {};
+    for (const key of ['width', 'height', 'maxKB'] as const) {
+      const value = Number(query.get(key));
+      const min = key === 'maxKB' ? 5 : 32;
+      const max = key === 'maxKB' ? 5000 : 2400;
+      if (query.has(key) && Number.isFinite(value) && value >= min && value <= max) patch[key] = value;
+    }
+    assistantSettings.current = patch;
+    setMessage('Your guide settings are ready. Add a file, then review the settings and preview before downloading.');
+  }, []);
   const input = useRef<HTMLInputElement>(null),
     form = useRef<HTMLFormElement>(null);
   const [tool, setTool] = useState<ToolId>('photo');
@@ -447,6 +464,7 @@ export default function Desk() {
   }
   function changeTool(next: ToolId) {
     if (operation.current) return;
+    assistantSettings.current = {};
     setTool(next);
     setView(next === 'sheet' ? 'sheet' : 'prepared');
     setPage(0);
@@ -648,13 +666,13 @@ export default function Desk() {
               url: image.src,
               image,
               originalBytes: file.size,
-              settings: chosen
+              settings: { ...(chosen
                 ? { ...chosen.settings }
                 : initialSettings(
                     tool,
                     image.naturalWidth,
                     image.naturalHeight,
-                  ),
+                  )), ...assistantSettings.current },
             });
           }
         } catch (e) {

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import SiteFooter from './site-footer';
+import FileAssistant from './file-assistant';
 export const metadata: Metadata = {
   metadataBase: new URL('https://sites-project.anshuldewangan19.workers.dev'),
   title: {
@@ -49,6 +50,7 @@ export default function RootLayout({
       <body>
         <div className="site-content">{children}</div>
         <SiteFooter />
+        <FileAssistant />
       </body>
     </html>
   );

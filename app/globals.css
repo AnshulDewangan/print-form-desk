@@ -2321,3 +2321,19 @@ h1 svg {
 .brand { flex-shrink:0; }
 @media(max-width:600px) { .sahajly-header { flex-direction:column; align-items:flex-start; padding:16px 20px; gap:16px; } .sahajly-header nav { gap:16px; font-size:14px; } .sahajly-wordmark { width:170px; } }
 
+
+/* On-device file guide */
+.file-assistant { position: fixed; right: 20px; bottom: 20px; z-index: 45; max-width: calc(100vw - 32px); }
+.assistant-toggle, .assistant-panel form button, .assistant-start { background: #362d43; color: white; border: 0; border-radius: 12px; padding: 12px 16px; font-weight: 650; cursor: pointer; }
+.assistant-toggle { box-shadow: 0 4px 18px #362d4326; }
+.assistant-panel { position: absolute; right: 0; bottom: 58px; width: 370px; max-width: calc(100vw - 32px); max-height: calc(100dvh - 120px); overflow-y: auto; background: white; color: #362d43; padding: 22px; border: 1px solid #e9dce1; border-radius: 18px; box-shadow: 0 12px 45px #362d4326; }
+.assistant-panel h2 { font-size: 22px; margin: 0 0 10px; }
+.assistant-panel p { font-size: 14px; line-height: 1.6; margin: 10px 0; }
+.assistant-panel label { display: block; font-weight: 650; margin-bottom: 8px; }
+.assistant-panel textarea { box-sizing: border-box; width: 100%; padding: 12px; border: 1px solid #c9bbc8; border-radius: 10px; resize: vertical; margin-bottom: 10px; }
+.assistant-panel button:focus-visible, .assistant-panel a:focus-visible, .assistant-toggle:focus-visible { outline: 3px solid #ed6f44; outline-offset: 3px; }
+.assistant-examples { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0; }
+.assistant-examples button { border: 1px solid #f4d3c6; border-radius: 14px; background: #fff5f0; color: #362d43; padding: 7px 10px; font-size: 12px; cursor: pointer; }
+.assistant-start { display: inline-block; margin: 8px 0 16px; text-decoration: none; }
+.assistant-panel small { display: block; font-size: 12px; line-height: 1.5; color: #716575; }
+@media print { .file-assistant { display: none; } }
