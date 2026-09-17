@@ -18,11 +18,7 @@ export default function Landing() {
         <section className="landing-hero">
           <div>
             <p className="eyebrow">LESS FRICTION. MORE DONE.</p>
-            <h1>
-              Everyday tasks,
-              <br />
-              <span>made simple.</span>
-            </h1>
+            <h1>Everyday tasks, made simple.</h1>
             <p className="landing-lead">
               A little help for the things that need doing. Resize images,
               prepare signatures and bring your PDFs together—all in your

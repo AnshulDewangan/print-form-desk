@@ -2350,7 +2350,7 @@ a, button, input, textarea, summary, select { -webkit-tap-highlight-color: trans
 .landing { padding-top: 14px; }
 .landing-hero { gap: 52px; padding: 58px 0 62px; grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr); }
 .landing h1 { display: block; font-size: clamp(40px, 5.1vw, 67px); line-height: 1.08; letter-spacing: -2.3px; }
-.landing h1 span { color: #bb4721; }
+.landing h1 span { color: inherit; }
 .landing-lead { font-size: 18px; max-width: 570px; margin: 22px 0; }
 .landing-primary { background: #bc4721; border-radius: 11px; min-height: 48px; }
 .hero-proof { display: flex; flex-wrap: wrap; gap: 10px 20px; margin-top: 20px; font-size: 12px; color: var(--muted); }
