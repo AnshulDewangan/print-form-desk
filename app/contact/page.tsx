@@ -1,6 +1,6 @@
 import InfoPage from '../info-page';
 
-export const metadata = { title: 'Contact · Print & Form Desk' };
+export const metadata = { title: 'Contact' };
 
 export default function ContactPage() {
   return (

@@ -1,12 +1,12 @@
 import InfoPage from '../info-page';
 
-export const metadata = { title: 'Privacy Policy · Print & Form Desk' };
+export const metadata = { title: 'Privacy Policy' };
 
 export default function PrivacyPage() {
   return (
     <InfoPage eyebrow="Privacy" title="Privacy Policy">
       <p>
-        Print & Form Desk is designed so normal photo, signature and PDF work
+        Sahajly is designed so normal photo, signature and PDF work
         happens inside your browser. The files you choose for free tools are not
         uploaded to our server.
       </p>

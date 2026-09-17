@@ -41,7 +41,7 @@ export async function printPDF(
       }
     }
   }
-  pdf.setTitle('Print & Form Desk — photo sheet');
+  pdf.setTitle('Sahajly — photo sheet');
   return pdf.save();
 }
 export async function imagePDF(images: Uint8Array[]) {
@@ -60,6 +60,6 @@ export async function imagePDF(images: Uint8Array[]) {
       height: h,
     });
   }
-  pdf.setTitle('Print & Form Desk — images');
+  pdf.setTitle('Sahajly — images');
   return pdf.save();
 }

@@ -1,12 +1,12 @@
 import InfoPage from '../info-page';
 
-export const metadata = { title: 'About · Print & Form Desk' };
+export const metadata = { title: 'About' };
 
 export default function AboutPage() {
   return (
-    <InfoPage eyebrow="About" title="About Print & Form Desk">
+    <InfoPage eyebrow="About" title="About Sahajly">
       <p>
-        Print & Form Desk helps people prepare upload-ready photos, signatures,
+        Sahajly helps people prepare upload-ready photos, signatures,
         print sheets and PDFs without installing heavy software.
       </p>
       <h2>Who it is for</h2>

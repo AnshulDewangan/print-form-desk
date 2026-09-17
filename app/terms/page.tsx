@@ -1,12 +1,12 @@
 import InfoPage from '../info-page';
 
-export const metadata = { title: 'Terms · Print & Form Desk' };
+export const metadata = { title: 'Terms' };
 
 export default function TermsPage() {
   return (
     <InfoPage eyebrow="Terms" title="Terms & Conditions">
       <p>
-        Print & Form Desk provides file-preparation tools for photos,
+        Sahajly provides file-preparation tools for photos,
         signatures, images and PDFs. You are responsible for checking the final
         file against the official form or portal instructions before submitting
         it.

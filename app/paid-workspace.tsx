@@ -349,7 +349,9 @@ export default function PaidWorkspace() {
         order_id: order.orderId,
         amount: order.amount,
         currency: order.currency,
-        name: 'Print & Form Desk',
+        name: 'Sahajly',
+        image: '/brand/icon-192.png',
+        theme: { color: '#513761' },
         description: `${order.name} · 30-day pass${order.testMode ? ' · TEST PAYMENT' : ''}`,
         prefill: email ? { email, method: 'upi' } : { method: 'upi' },
         config: {

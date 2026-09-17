@@ -4,8 +4,8 @@ import SiteFooter from './site-footer';
 export const metadata: Metadata = {
   metadataBase: new URL('https://sites-project.anshuldewangan19.workers.dev'),
   title: {
-    default: 'Print & Form Desk | Free Photo and PDF Tools',
-    template: '%s | Print & Form Desk',
+    default: 'Sahajly | Free Photo and PDF Tools',
+    template: '%s | Sahajly',
   },
   description:
     'Free browser-based photo, signature and PDF tools for online forms. Resize, compress, arrange, merge, extract, rotate and clean up files before you submit them.',
@@ -21,19 +21,21 @@ export const metadata: Metadata = {
   ],
   alternates: { canonical: '/' },
   openGraph: {
-    title: 'Print & Form Desk | Free Photo and PDF Tools',
+    title: 'Sahajly | Free Photo and PDF Tools',
     description:
       'Prepare photos, signatures and PDFs for online forms with clear, private browser tools.',
     url: '/',
-    siteName: 'Print & Form Desk',
+    siteName: 'Sahajly',
     type: 'website',
+    images: [{ url: '/brand/sahajly-social.png', width: 1536, height: 1024, alt: 'Sahajly — photo and PDF tools' }],
   },
   twitter: {
-    card: 'summary',
-    title: 'Print & Form Desk',
+    card: 'summary_large_image',
+    title: 'Sahajly',
     description: 'Free photo, signature and PDF tools for online forms.',
   },
-  icons: { icon: '/favicon.svg' },
+  icons: { icon: '/favicon.svg', apple: '/brand/apple-touch-icon.png' },
+  manifest: '/site.webmanifest',
 };
 export default function RootLayout({
   children,

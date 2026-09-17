@@ -1,7 +1,7 @@
 import InfoPage from '../info-page';
 import { PLANS } from '@/lib/plans';
 
-export const metadata = { title: 'Pricing · Print & Form Desk' };
+export const metadata = { title: 'Pricing' };
 
 export default function PricingPage() {
   return (

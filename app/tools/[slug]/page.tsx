@@ -21,7 +21,7 @@ export default async function ToolPage({
       <div className="tool-detail">
         <aside className="detail-sidebar">
           <Link href="/" className="detail-brand">
-            Print & Form Desk
+            <img className="sahajly-wordmark" src="/brand/sahajly-wordmark.svg" alt="Sahajly" width={198} height={60} />
           </Link>
           <p className="eyebrow">ALL TOOLS</p>
           {ids.map((item) => (

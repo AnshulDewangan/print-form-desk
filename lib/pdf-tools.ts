@@ -63,7 +63,7 @@ export async function combinePDFs(
     for (const page of await output.copyPages(source, indices))
       output.addPage(page);
   }
-  output.setTitle('Print & Form Desk');
+  output.setTitle('Sahajly');
   return output.save();
 }
 
@@ -88,6 +88,6 @@ export async function removePDFPages(bytes: Uint8Array, indices: number[]) {
     throw new Error('You must keep at least one page in the PDF.');
   const output = await PDFDocument.create();
   for (const page of await output.copyPages(source, keep)) output.addPage(page);
-  output.setTitle('Print & Form Desk');
+  output.setTitle('Sahajly');
   return output.save();
 }

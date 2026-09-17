@@ -939,13 +939,8 @@ export default function Desk() {
         Skip to workspace
       </a>
       <header className="topbar">
-        <Link className="brand" href="/" aria-label="Print & Form Desk home">
-          <span className="brand-icon">
-            <Printer size={23} />
-          </span>
-          <span>
-            Print & Form <span className="brand-light">Desk</span>
-          </span>
+        <Link className="brand" href="/" aria-label="Sahajly home">
+          <img className="sahajly-wordmark" src="/brand/sahajly-wordmark.svg" alt="Sahajly" width={198} height={60} />
         </Link>
         <span className="privacy">
           <ShieldCheck size={17} /> Your files stay on your device

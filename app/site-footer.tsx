@@ -5,7 +5,7 @@ export default function SiteFooter() {
   return (
     <footer className="site-footer">
       <div>
-        <strong>Print & Form Desk</strong>
+        <a href="/" aria-label="Sahajly home"><img className="sahajly-wordmark" src="/brand/sahajly-wordmark.svg" alt="Sahajly" width={198} height={60} /></a>
         <p>Prepare photos, signatures and PDFs for your next application.</p>
       </div>
       <nav aria-label="Footer navigation">

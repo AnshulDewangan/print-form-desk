@@ -34,7 +34,7 @@ const examples: Record<ToolId, string> = {
 export default function Landing() {
   return (
     <>
-      <main className="landing">
+      <header className="sahajly-header"><a href="/" aria-label="Sahajly home"><img className="sahajly-wordmark" src="/brand/sahajly-wordmark.svg" alt="Sahajly" width={198} height={60} /></a><nav aria-label="Main navigation"><a href="/" aria-current="page">Home</a><a href="/pricing">Pricing</a><a href="/contact">Support</a><a href="/workspace?workspace=plans">My account</a></nav></header><main className="landing">
         <section className="landing-hero">
           <div>
             <p className="eyebrow">PRIVATE FILE TOOLS FOR EVERYDAY FORMS</p>

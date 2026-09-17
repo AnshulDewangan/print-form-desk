@@ -1,12 +1,12 @@
 import InfoPage from '../info-page';
 
-export const metadata = { title: 'Refund Policy · Print & Form Desk' };
+export const metadata = { title: 'Refund Policy' };
 
 export default function RefundsPage() {
   return (
     <InfoPage eyebrow="Refunds" title="Refund Policy">
       <p>
-        Print & Form Desk passes are short-duration digital access passes.
+        Sahajly passes are short-duration digital access passes.
         Because the tools can be used immediately after access is activated,
         refunds are reviewed case by case.
       </p>

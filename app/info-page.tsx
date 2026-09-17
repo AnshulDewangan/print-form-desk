@@ -13,7 +13,7 @@ export default function InfoPage({
   return (
     <main className="static-page">
       <nav className="info-nav" aria-label="Page navigation">
-        <Link href="/">Print & Form Desk</Link>
+        <Link href="/"><img className="sahajly-wordmark" src="/brand/sahajly-wordmark.svg" alt="Sahajly" width={198} height={60} /></Link>
         <Link href="/pricing">Pricing</Link>
         <Link href="/contact">Help & support</Link>
       </nav>
