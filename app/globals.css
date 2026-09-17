@@ -2337,3 +2337,110 @@ h1 svg {
 .assistant-start { display: inline-block; margin: 8px 0 16px; text-decoration: none; }
 .assistant-panel small { display: block; font-size: 12px; line-height: 1.5; color: #716575; }
 @media print { .file-assistant { display: none; } }
+/* Sahajly customer experience: consistent rhythm and responsive layouts */
+html { scroll-padding-top: 24px; }
+a, button, input, textarea, summary, select { -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: 3px solid #be4a21; outline-offset: 4px; }
+.skip-link { position: fixed; top: -90px; left: 18px; padding: 12px 20px; z-index: 100; background: #362d43; color: white; border-radius: 8px; }
+.skip-link:focus { top: 12px; }
+.sahajly-header { min-height: 90px; }
+.sahajly-header nav { align-items: center; }
+.sahajly-header nav a { padding: 8px 0; text-decoration: none; }
+.sahajly-header .account-link { border: 1px solid var(--border); border-radius: 10px; padding: 9px 15px; }
+.landing { padding-top: 14px; }
+.landing-hero { gap: 52px; padding: 58px 0 62px; grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr); }
+.landing h1 { display: block; font-size: clamp(40px, 5.1vw, 67px); line-height: 1.08; letter-spacing: -2.3px; }
+.landing h1 span { color: #bb4721; }
+.landing-lead { font-size: 18px; max-width: 570px; margin: 22px 0; }
+.landing-primary { background: #bc4721; border-radius: 11px; min-height: 48px; }
+.hero-proof { display: flex; flex-wrap: wrap; gap: 10px 20px; margin-top: 20px; font-size: 12px; color: var(--muted); }
+.hero-proof span { display: flex; gap: 5px; align-items: center; }
+.hero-jobs { padding: 28px; background: linear-gradient(140deg, #fff1e9, #fff 75%); border: 1px solid #f0d9cc; border-radius: 24px; box-shadow: 0 14px 40px #51376107; }
+.hero-jobs h2 { font-size: 27px; letter-spacing: -.6px; margin: 0 0 20px; }
+.hero-jobs > a { display: grid; grid-template-columns: 40px minmax(0, 1fr) 18px; gap: 12px; align-items: center; padding: 17px 0; text-decoration: none; border-top: 1px solid #f0e4dd; color: var(--foreground); }
+.hero-jobs > a:hover strong { color: #bc4721; }
+.hero-jobs strong, .hero-jobs small { display: block; }
+.hero-jobs strong { font-size: 14px; }
+.hero-jobs small { font-size: 12px; color: var(--muted); margin-top: 3px; }
+.job-icon { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 12px; background: #fff; color: #b44825; border: 1px solid #f0dfd4; }
+.hero-note { font-size: 12px; color: var(--muted); margin: 18px 0 0; }
+.catalog-section { border-top: 1px solid var(--border); padding-top: 38px; scroll-margin-top: 20px; }
+.catalog-section .section-heading { margin-bottom: 22px; align-items: center; }
+.catalog-section h2, .pack-promo h2, .home-faq h2 { font-size: clamp(25px, 3vw, 32px); letter-spacing: -.7px; line-height: 1.2; }
+.free-label { font-size: 12px; font-weight: 600; color: #74583f; background: #fff0e5; padding: 8px 12px; border-radius: 20px; white-space: nowrap; }
+.catalog-controls { display: flex; gap: 18px; justify-content: space-between; align-items: center; }
+.catalog-filters { display: flex; gap: 5px; padding: 4px; background: #efebf2; border-radius: 12px; }
+.catalog-filters button { min-height: 42px; border: 0; padding: 8px 19px; border-radius: 9px; cursor: pointer; font-weight: 600; font-size: 14px; }
+.catalog-filters button[aria-pressed=true] { background: #fff; box-shadow: 0 2px 5px #362d4310; }
+.catalog-search { display: flex; align-items: center; gap: 10px; padding: 12px 15px; background: white; border: 1px solid var(--border); border-radius: 12px; width: min(100%, 390px); color: var(--muted); }
+.catalog-search input { width: 100%; min-width: 0; outline: none; background: transparent; font-size: 14px; }
+.catalog-search:focus-within { outline: 2px solid #bc4721; }
+.catalog-count { margin: 18px 0 12px; font-size: 12px; color: var(--muted); }
+.catalog-card { display: flex; align-items: stretch; flex-direction: column; padding: 24px; gap: 0; min-height: 220px; transition: border-color .15s, box-shadow .15s; }
+.card-top { display: flex; align-items: center; justify-content: space-between; color: #ada4b4; margin-bottom: 20px; }
+.catalog-card .feature-icon { background: #fff0e5; color: #af421f; width: 46px; height: 46px; }
+.catalog-card.category-pdfs .feature-icon { background: #f1eaf7; color: #694581; }
+.catalog-card h3 { font-size: 18px; font-weight: 700; margin: 0 0 8px; }
+.catalog-card p { font-size: 14px; color: var(--muted); line-height: 1.6; margin: 0 0 18px; }
+.card-category { font-size: 11px; color: #75697e; font-weight: 600; margin-top: auto; }
+.catalog-empty { padding: 38px; text-align: center; background: white; border: 1px dashed var(--border); border-radius: 16px; }
+.catalog-empty h3 { font-size: 22px; font-weight: 700; }
+.catalog-empty p { margin: 12px auto; max-width: 580px; color: var(--muted); }
+.catalog-empty button { padding: 10px 16px; background: #362d43; color: white; border-radius: 9px; cursor: pointer; }
+.landing-benefits { margin-top: 36px; padding: 30px 0; gap: 28px; }
+.pack-promo { margin-top: 26px; border-radius: 20px; padding: 34px; background: #eee7f3; display: flex; align-items: center; gap: 32px; justify-content: space-between; }
+.pack-promo > div { max-width: 650px; }
+.pack-promo p:not(.eyebrow) { color: #695b73; margin-top: 14px; font-size: 15px; }
+.pack-promo > a { flex-shrink: 0; background: #513761; }
+.home-faq { display: grid; grid-template-columns: 1fr 1.6fr; gap: 54px; padding-top: 64px; }
+.home-faq a { display: inline-block; margin-top: 18px; color: #934123; font-weight: 600; font-size: 14px; }
+.home-faq details { background: white; }
+.site-footer { padding: 38px max(24px, calc((100vw - 1216px) / 2)) 88px; grid-template-columns: minmax(200px, 1fr) minmax(0, 1.5fr); gap: 24px 40px; }
+.site-footer nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px 24px; }
+.site-footer > div > p { margin-top: 9px; }
+.static-page { padding-top: 32px; }
+.static-plan-grid section { display: flex; flex-direction: column; gap: 12px; }
+.static-plan-grid section > strong { margin-top: auto; }
+.static-plan-grid a { display: block; border: 1px solid var(--border); padding: 10px 14px; border-radius: 9px; text-align: center; text-decoration: none; font-weight: 600; }
+.static-plan-grid a:hover { background: #fff0e9; }
+.file-assistant { right: 18px; bottom: 16px; }
+.assistant-toggle { font-size: 13px; min-height: 44px; }
+@media (max-width: 1000px) {
+  .landing-hero { gap: 24px; grid-template-columns: minmax(0, 1fr) minmax(280px, .8fr); }
+  .landing h1 { font-size: 46px; }
+  .hero-jobs { padding: 22px; }
+  .pack-promo { flex-direction: column; align-items: flex-start; }
+  .home-faq { gap: 30px; }
+  .tool-navigation { display: flex !important; overflow-x: auto; padding-bottom: 8px !important; justify-content: flex-start !important; }
+  .tool-navigation .tool-link { flex: 0 0 auto !important; min-height: 46px; flex-direction: row !important; padding: 10px 12px !important; }
+  .tool-sidebar .workspace-home-link { margin-bottom: 10px; }
+}
+@media (max-width: 760px) {
+  .landing { padding: 12px 20px 46px; }
+  .landing-hero { grid-template-columns: 1fr; padding: 28px 0 32px; }
+  .landing h1 { font-size: clamp(38px, 7vw, 54px); letter-spacing: -1.5px; }
+  .landing-lead { font-size: 16px; }
+  .hero-jobs { padding: 22px; }
+  .catalog-controls { flex-direction: column; align-items: stretch; gap: 12px; }
+  .catalog-search { width: 100%; }
+  .catalog-filters { align-self: flex-start; }
+  .catalog-section .section-heading { align-items: flex-start; gap: 12px; flex-direction: column; }
+  .catalog-card { padding: 20px; min-height: 205px; }
+  .landing-benefits { grid-template-columns: 1fr; gap: 22px; }
+  .home-faq { grid-template-columns: 1fr; gap: 20px; padding-top: 40px; }
+  .pack-promo { padding: 24px; }
+  .site-footer { grid-template-columns: 1fr; padding: 28px 20px 88px; }
+  .site-footer nav { justify-content: flex-start; }
+  .topbar { flex-wrap: wrap; }
+  .topbar .brand { max-width: 100%; }
+}
+@media (max-width: 420px) {
+  .sahajly-header nav { gap: 12px; font-size: 13px; width: 100%; }
+  .sahajly-header .account-link { padding: 7px 9px; margin-left: auto; }
+  .landing-grid { grid-template-columns: 1fr; }
+  .hero-proof { flex-direction: column; }
+  .catalog-filters { width: 100%; }
+  .catalog-filters button { flex: 1; padding: 8px 10px; }
+  .assistant-panel { padding: 18px; }
+}
+.catalog-count { display: block; }

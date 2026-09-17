@@ -1,7 +1,11 @@
 import InfoPage from '../info-page';
 import { PLANS } from '@/lib/plans';
+import { TOOL_INFO } from '@/lib/workflow';
 
-export const metadata = { title: 'Pricing' };
+export const metadata = {
+  title: 'Pricing',
+  alternates: { canonical: '/pricing' },
+};
 
 export default function PricingPage() {
   return (
@@ -42,6 +46,7 @@ export default function PricingPage() {
             pages.
           </p>
           <strong>₹0</strong>
+          <a href="/#tools">Use free tools</a>
         </section>
         <section>
           <h2>{PLANS.personal.name}</h2>
@@ -50,6 +55,7 @@ export default function PricingPage() {
             and {PLANS.personal.templates} saved templates.
           </p>
           <strong>₹{PLANS.personal.amount / 100} / 30 days</strong>
+          <a href="/workspace?workspace=plans">View Personal pass</a>
         </section>
         <section>
           <h2>{PLANS.shop.name}</h2>
@@ -58,11 +64,12 @@ export default function PricingPage() {
             {PLANS.shop.templates} templates and shop-friendly reset workflow.
           </p>
           <strong>₹{PLANS.shop.amount / 100} / 30 days</strong>
+          <a href="/workspace?workspace=plans">View Shop pass</a>
         </section>
       </div>
       <p>
-        Passes do not renew automatically. Live checkout opens only after the
-        merchant account is fully ready.
+        One payment covers 30 days, with no automatic renewal. Check current
+        purchase availability in Plans & billing before choosing a pass.
       </p>
       <h2>What happens after my free packs?</h2>
       <div
@@ -89,7 +96,9 @@ export default function PricingPage() {
               <td>₹{PLANS.shop.amount / 100} for 30 days</td>
             </tr>
             <tr>
-              <th scope="row">9 standard photo and PDF tools</th>
+              <th scope="row">
+                {Object.keys(TOOL_INFO).length} standard photo and PDF tools
+              </th>
               <td>Included</td>
               <td>Included</td>
               <td>Included</td>

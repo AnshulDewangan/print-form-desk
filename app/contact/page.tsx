@@ -1,18 +1,23 @@
 import InfoPage from '../info-page';
+import { SUPPORT_EMAIL } from '@/lib/site';
 
-export const metadata = { title: 'Contact' };
+export const metadata = {
+  title: 'Help & support',
+  alternates: { canonical: '/contact' },
+};
 
 export default function ContactPage() {
   return (
-    <InfoPage eyebrow="Support" title="Contact & Support">
+    <InfoPage eyebrow="Support" title="How can we help?">
       <p>
-        For support, keep the message short and include the tool name, browser,
-        and what you expected to download.
+        Find help with files, accounts and purchases below. If you need to
+        contact us, include the tool name, your browser and what went wrong.
       </p>
       <h2>Common issues</h2>
       <ul>
         <li>
-          Payment completed but access not active: open Plans & billing and use
+          Payment completed but access not active: open{' '}
+          <a href="/workspace?workspace=plans">Plans & billing</a> and use
           Refresh access.
         </li>
         <li>
@@ -24,22 +29,21 @@ export default function ContactPage() {
           against the official instruction.
         </li>
       </ul>
-      <h2>Safe support rule</h2>
+      <h2>Keep your information private</h2>
       <p>
-        Do not share OTPs, passwords, UPI PINs, full card numbers or identity
-        documents unless a trusted official support channel specifically
-        requires them.
+        We do not need your password, OTP, UPI PIN or full card number to help.
+        Start with the error message and file details, without attaching
+        identity documents or other personal files.
       </p>
       <section className="support-contact">
         <h2>Get in touch</h2>
         <p>
-          Email{' '}
-          <a href="mailto:printandform@gmail.com">printandform@gmail.com</a> for
-          tool issues, account questions, payment problems or privacy requests.
+          Email <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a> for tool
+          issues, account questions, payment problems or privacy requests.
         </p>
         <a
           className="support-email"
-          href="mailto:printandform@gmail.com?subject=Print%20%26%20Form%20Desk%20support"
+          href={`mailto:${SUPPORT_EMAIL}?subject=Sahajly%20support`}
         >
           Email support
         </a>
@@ -106,9 +110,9 @@ export default function ContactPage() {
         <details>
           <summary>Do I need an account?</summary>
           <p>
-            The nine main tools work without signing in. An account is needed
-            for paid application packs and account templates. Review Pricing for
-            the difference between free tools and paid passes.
+            The core image and PDF tools work without signing in. An account is
+            needed for paid application packs and account templates. Review
+            Pricing for the difference between free tools and paid passes.
           </p>
         </details>
         <details>
@@ -121,6 +125,13 @@ export default function ContactPage() {
           </p>
         </details>
       </div>
+      <h2>Suggest a useful tool</h2>
+      <p>
+        Tell us which everyday task you want to simplify, the file types
+        involved and what the finished result should look like. We use these
+        requests to understand what to build next; a request is not a promise of
+        availability.
+      </p>
       <h2>Help us reproduce an issue</h2>
       <ol>
         <li>Name the tool and describe the result you expected.</li>

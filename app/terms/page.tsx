@@ -1,15 +1,14 @@
 import InfoPage from '../info-page';
 
-export const metadata = { title: 'Terms' };
+export const metadata = { title: 'Terms', alternates: { canonical: '/terms' } };
 
 export default function TermsPage() {
   return (
     <InfoPage eyebrow="Terms" title="Terms & Conditions">
       <p>
-        Sahajly provides file-preparation tools for photos,
-        signatures, images and PDFs. You are responsible for checking the final
-        file against the official form or portal instructions before submitting
-        it.
+        Sahajly provides file-preparation tools for photos, signatures, images
+        and PDFs. You are responsible for checking the final file against the
+        official form or portal instructions before submitting it.
       </p>
       <h2>Use of tools</h2>
       <p>

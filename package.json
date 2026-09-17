@@ -6,6 +6,7 @@
     "node": ">=22.13.0"
   },
   "scripts": {
+    "test": "node scripts/test.mjs && node scripts/test-billing.mjs && node scripts/test-pack-trial.mjs && node scripts/test-experience.mjs",
     "predev": "node scripts/prepare-pdf-assets.mjs",
     "prebuild": "node scripts/prepare-pdf-assets.mjs",
     "dev": "vinext dev",

@@ -1,14 +1,18 @@
 import InfoPage from '../info-page';
+import { SUPPORT_EMAIL } from '@/lib/site';
 
-export const metadata = { title: 'Refund Policy' };
+export const metadata = {
+  title: 'Refund Policy',
+  alternates: { canonical: '/refunds' },
+};
 
 export default function RefundsPage() {
   return (
     <InfoPage eyebrow="Refunds" title="Refund Policy">
       <p>
-        Sahajly passes are short-duration digital access passes.
-        Because the tools can be used immediately after access is activated,
-        refunds are reviewed case by case.
+        Sahajly passes are short-duration digital access passes. Because the
+        tools can be used immediately after access is activated, refunds are
+        reviewed case by case.
       </p>
       <h2>When to contact us</h2>
       <p>
@@ -19,8 +23,8 @@ export default function RefundsPage() {
       <h2>Information needed</h2>
       <p>
         Email{' '}
-        <a href="mailto:printandform@gmail.com?subject=Payment%20support">
-          printandform@gmail.com
+        <a href={`mailto:${SUPPORT_EMAIL}?subject=Sahajly%20payment%20support`}>
+          {SUPPORT_EMAIL}
         </a>{' '}
         to request help with a payment. Sending a request does not automatically
         approve a refund.

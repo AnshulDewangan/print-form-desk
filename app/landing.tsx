@@ -1,124 +1,156 @@
+import Link from 'next/link';
 import {
   ArrowRight,
   Check,
-  FileImage,
-  FileText,
   ShieldCheck,
-  Sparkles,
+  Zap,
+  Files,
+  Image,
+  Download,
 } from 'lucide-react';
-import { TOOL_INFO, type ToolId } from '@/lib/workflow';
-
-const groups: { title: string; detail: string; tools: ToolId[] }[] = [
-  {
-    title: 'Photos & signatures',
-    detail: 'Prepare exact-size images for forms, exams and applications.',
-    tools: ['photo', 'signature', 'compress', 'sheet'],
-  },
-  {
-    title: 'PDF tools',
-    detail: 'Combine, extract, rotate or clean up documents in a few steps.',
-    tools: ['pdf', 'merge', 'extract', 'rotatePdf', 'removePages'],
-  },
-];
-const examples: Record<ToolId, string> = {
-  photo: 'Resize and crop passport photos',
-  signature: 'Prepare a clean signature image',
-  compress: 'Fit images under a KB limit',
-  sheet: 'Print several photos on one sheet',
-  pdf: 'Turn images into a PDF',
-  merge: 'Combine multiple PDFs',
-  extract: 'Save selected PDF pages',
-  rotatePdf: 'Turn sideways PDF pages',
-  removePages: 'Delete unwanted PDF pages',
-};
+import SiteHeader from './site-header';
+import ToolCatalog from './tool-catalog';
 export default function Landing() {
   return (
     <>
-      <header className="sahajly-header"><a href="/" aria-label="Sahajly home"><img className="sahajly-wordmark" src="/brand/sahajly-wordmark.svg" alt="Sahajly" width={198} height={60} /></a><nav aria-label="Main navigation"><a href="/" aria-current="page">Home</a><a href="/pricing">Pricing</a><a href="/contact">Support</a><a href="/workspace?workspace=plans">My account</a></nav></header><main className="landing">
+      <SiteHeader />
+      <main id="main-content" className="landing">
         <section className="landing-hero">
           <div>
-            <p className="eyebrow">PRIVATE FILE TOOLS FOR EVERYDAY FORMS</p>
-            <h1>Get your documents ready to submit.</h1>
+            <p className="eyebrow">LESS FRICTION. MORE DONE.</p>
+            <h1>
+              Everyday tasks,
+              <br />
+              <span>made simple.</span>
+            </h1>
             <p className="landing-lead">
-              Resize photos, prepare signatures and organize PDFs with clear
-              steps and an instant download.
+              A little help for the things that need doing. Resize images,
+              prepare signatures and bring your PDFs together—all in your
+              browser.
             </p>
-            <a className="landing-primary" href="/workspace">
-              Start with a free tool <ArrowRight size={18} />
-            </a>
+            <Link className="landing-primary" href="#tools">
+              Find your tool <ArrowRight size={18} />
+            </Link>
+            <div className="hero-proof">
+              <span>
+                <Check size={16} /> Free core tools
+              </span>
+              <span>
+                <ShieldCheck size={16} /> Files stay on your device
+              </span>
+            </div>
           </div>
-          <div className="landing-trust">
-            <ShieldCheck size={28} />
-            <strong>Made for simple, safe file work</strong>
-            <span>
-              Free tools run in your browser. Your original files stay
-              unchanged.
-            </span>
+          <div className="hero-jobs">
+            <p className="eyebrow">A GOOD PLACE TO START</p>
+            <h2>Small jobs. Sorted.</h2>
+            <Link href="/workspace?assist=compress&maxKB=50">
+              <span className="job-icon">
+                <Image size={22} />
+              </span>
+              <span>
+                <strong>That photo is too large?</strong>
+                <small>Prepare an image under 50 KB</small>
+              </span>
+              <ArrowRight size={18} />
+            </Link>
+            <Link href="/tools/merge">
+              <span className="job-icon">
+                <Files size={22} />
+              </span>
+              <span>
+                <strong>Documents in too many files?</strong>
+                <small>Combine your PDFs into one</small>
+              </span>
+              <ArrowRight size={18} />
+            </Link>
+            <Link href="/tools/sheet">
+              <span className="job-icon">
+                <Download size={22} />
+              </span>
+              <span>
+                <strong>Need a sheet of photos?</strong>
+                <small>Arrange copies, then print</small>
+              </span>
+              <ArrowRight size={18} />
+            </Link>
+            <p className="hero-note">
+              Choose a task. Add your file. Check and download.
+            </p>
           </div>
         </section>
-        <section className="landing-tools">
-          <div className="section-heading">
-            <div>
-              <p className="eyebrow">CHOOSE A JOB</p>
-              <h2>What do you need to do?</h2>
-            </div>
-            <a href="/workspace">
-              Open workspace <ArrowRight size={16} />
-            </a>
+        <ToolCatalog />
+        <section className="landing-benefits" aria-label="Why use Sahajly">
+          <div>
+            <Zap size={24} />
+            <strong>Get straight to work</strong>
+            <span>No installation or account for the core tools.</span>
           </div>
-          {groups.map((group) => (
-            <div className="landing-group" key={group.title}>
-              <div className="group-heading">
-                <h3>{group.title}</h3>
-                <p>{group.detail}</p>
-              </div>
-              <div className="landing-grid">
-                {group.tools.map((id) => (
-                  <a className="feature-card" href={`/tools/${id}`} key={id}>
-                    <span className="feature-icon">
-                      {id === 'photo' ||
-                      id === 'signature' ||
-                      id === 'compress' ||
-                      id === 'sheet' ? (
-                        <FileImage size={22} />
-                      ) : (
-                        <FileText size={22} />
-                      )}
-                    </span>
-                    <span>
-                      <strong>{TOOL_INFO[id].title}</strong>
-                      <small>{examples[id]}</small>
-                      <em>
-                        {id === 'photo' ||
-                        id === 'signature' ||
-                        id === 'compress' ||
-                        id === 'sheet'
-                          ? 'Free browser tool'
-                          : 'Free browser tool'}
-                      </em>
-                    </span>
-                    <ArrowRight size={18} />
-                  </a>
-                ))}
-              </div>
-            </div>
-          ))}
+          <div>
+            <Check size={24} />
+            <strong>Stay in control</strong>
+            <span>Adjust the settings and preview your result.</span>
+          </div>
+          <div>
+            <ShieldCheck size={24} />
+            <strong>Your files stay yours</strong>
+            <span>Current tools process documents on your device.</span>
+          </div>
         </section>
-        <section className="landing-benefits">
+        <section className="pack-promo">
           <div>
-            <Sparkles size={22} />
-            <strong>Simple by design</strong>
-            <span>No confusing settings until you need them.</span>
+            <p className="eyebrow">FOR REPEAT TASKS</p>
+            <h2>One application. One organized pack.</h2>
+            <p>
+              Prepare a photo and signature together, add supporting documents,
+              and download one ZIP. Try three packs free with an account. Paid
+              passes add more packs and reusable templates.
+            </p>
           </div>
+          <Link className="landing-primary" href="/pricing">
+            See what’s included <ArrowRight size={18} />
+          </Link>
+        </section>
+        <section className="home-faq" aria-labelledby="faq-title">
           <div>
-            <Check size={22} />
-            <strong>Preview before download</strong>
-            <span>Check the result before submitting it.</span>
+            <p className="eyebrow">A FEW HELPFUL ANSWERS</p>
+            <h2 id="faq-title">Before you begin</h2>
+            <Link href="/contact">Visit the help centre →</Link>
           </div>
-          <div>
-            <ShieldCheck size={22} />
-            <strong>Privacy first</strong>
-            <span>Files stay in your browser for current tools.</span>
+          <div className="support-faq">
+            <details>
+              <summary>Are the tools really free?</summary>
+              <p>
+                Yes. The image and PDF tools listed above are free without
+                signing in. Application packs have a separate three-pack account
+                trial; paid passes add further packs and saved account
+                templates.
+              </p>
+            </details>
+            <details>
+              <summary>Are my documents uploaded?</summary>
+              <p>
+                The current file tools process documents in your browser.
+                Accounts, template settings and payment records use online
+                services. Your original files are not changed.
+              </p>
+            </details>
+            <details>
+              <summary>Can I use Sahajly on my phone?</summary>
+              <p>
+                Use the website in your phone’s browser. Smaller batches work
+                best on devices with limited memory. Native Android and iOS apps
+                are not available yet.
+              </p>
+            </details>
+            <details>
+              <summary>Which files are supported?</summary>
+              <p>
+                Image tools accept JPG, PNG and WebP. PDF tools accept
+                supported, unencrypted PDFs. Password-protected and
+                interactive-form PDFs are rejected. The workspace shows file and
+                batch limits before you start.
+              </p>
+            </details>
           </div>
         </section>
       </main>

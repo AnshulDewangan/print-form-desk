@@ -4,7 +4,6 @@ import { useEffect, useId, useRef, useState } from 'react';
 import Link from 'next/link';
 import { flushSync } from 'react-dom';
 import {
-  ImagePlus,
   Printer,
   ShieldCheck,
   Upload,
@@ -66,7 +65,6 @@ import {
   AlertDialogCancel,
 } from '@/components/ui/alert-dialog';
 import {
-  DEFAULT,
   PRESETS,
   SHEETS,
   LIMITS,
@@ -293,35 +291,19 @@ function Step({
   );
 }
 
-export default function Desk() {
+export default function Desk({ initialTool = 'photo' }: { initialTool?: ToolId }) {
   const assistantSettings = useRef<Partial<Settings>>({});
-  useEffect(() => {
-    const query = new URLSearchParams(window.location.search);
-    const requested = query.get('assist');
-    if (!requested || !Object.prototype.hasOwnProperty.call(TOOL_INFO, requested)) return;
-    setTool(requested as ToolId);
-    setPresetId('custom');
-    const patch: Partial<Settings> = {};
-    for (const key of ['width', 'height', 'maxKB'] as const) {
-      const value = Number(query.get(key));
-      const min = key === 'maxKB' ? 5 : 32;
-      const max = key === 'maxKB' ? 5000 : 2400;
-      if (query.has(key) && Number.isFinite(value) && value >= min && value <= max) patch[key] = value;
-    }
-    assistantSettings.current = patch;
-    setMessage('Your guide settings are ready. Add a file, then review the settings and preview before downloading.');
-  }, []);
   const input = useRef<HTMLInputElement>(null),
     form = useRef<HTMLFormElement>(null);
-  const [tool, setTool] = useState<ToolId>('photo');
+  const [tool, setTool] = useState<ToolId>(initialTool);
   const [assets, setAssets] = useState<Asset[]>([]),
     [selected, setSelected] = useState('');
   const [pdfs, setPdfs] = useState<PDFAsset[]>([]),
     [pdfSelected, setPdfSelected] = useState('');
   const [saved, setSaved] = useState<Preset[]>([]),
-    [presetId, setPresetId] = useState('photo');
+    [presetId, setPresetId] = useState(initialTool === 'signature' ? 'signature' : initialTool === 'photo' || initialTool === 'sheet' ? 'photo' : 'custom');
   const [sheetId, setSheetId] = useState<keyof typeof SHEETS>('a4'),
-    [view, setView] = useState('prepared'),
+    [view, setView] = useState(initialTool === 'sheet' ? 'sheet' : 'prepared'),
     [page, setPage] = useState(0);
   const [pdfSource, setPdfSource] = useState('original'),
     [pageRange, setPageRange] = useState(''),
@@ -375,6 +357,22 @@ export default function Desk() {
   const pages = (layout.at(-1)?.page ?? -1) + 1,
     visiblePage = Math.min(page, Math.max(0, pages - 1));
 
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
+    const requested = query.get('assist') ?? query.get('tool');
+    if (!requested || !Object.prototype.hasOwnProperty.call(TOOL_INFO, requested)) return;
+    setTool(requested as ToolId);
+    setPresetId('custom');
+    const patch: Partial<Settings> = {};
+    for (const key of ['width', 'height', 'maxKB'] as const) {
+      const value = Number(query.get(key));
+      const min = key === 'maxKB' ? 5 : 32;
+      const max = key === 'maxKB' ? 5000 : 2400;
+      if (query.has(key) && Number.isFinite(value) && value >= min && value <= max) patch[key] = value;
+    }
+    assistantSettings.current = patch;
+    if (query.has('assist')) setMessage('Your guide settings are ready. Add a file, then review the settings and preview before downloading.');
+  }, []);
   useEffect(() => {
     mounted.current = true;
     try {
@@ -466,6 +464,12 @@ export default function Desk() {
     if (operation.current) return;
     assistantSettings.current = {};
     setTool(next);
+    setPageRange('');
+    setPdfRotation('90');
+    const nextUrl = new URL(window.location.href);
+    nextUrl.search = '';
+    nextUrl.searchParams.set('tool', next);
+    window.history.replaceState(window.history.state, '', nextUrl);
     setView(next === 'sheet' ? 'sheet' : 'prepared');
     setPage(0);
     setError('');
@@ -973,7 +977,7 @@ export default function Desk() {
         </Button>
         <PaidWorkspace />
       </header>
-      <main className="main">
+      <main id="main-content" className="main">
         <Tabs
           orientation="vertical"
           value={tool}
@@ -1294,7 +1298,7 @@ export default function Desk() {
                             {pdfSource === 'original' ? (
                               <img
                                 src={active.url}
-                                alt={`Full image: ${active.name}`}
+                                alt={`Full view: ${active.name}`}
                               />
                             ) : (
                               <ProcessedImage asset={active} />
@@ -1340,7 +1344,7 @@ export default function Desk() {
                               <img
                                 className="original-preview"
                                 src={active.url}
-                                alt={`Original image: ${active.name}`}
+                                alt={`Original: ${active.name}`}
                               />
                               <span className="dimension-tag">
                                 Original · {active.image.naturalWidth} ×{' '}
@@ -2038,10 +2042,10 @@ export default function Desk() {
                 savePreset();
               }}
             >
-              <label className="field">
+              <label className="field" htmlFor="saved-size-name">
                 <span className="field-label">Saved size name</span>
                 <Input
-                  autoFocus
+                  id="saved-size-name"
                   required
                   maxLength={60}
                   placeholder="e.g. College form — photo"

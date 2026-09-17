@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /workspace
+Sitemap: https://sites-project.anshuldewangan19.workers.dev/sitemap.xml

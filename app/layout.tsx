@@ -5,7 +5,7 @@ import FileAssistant from './file-assistant';
 export const metadata: Metadata = {
   metadataBase: new URL('https://sites-project.anshuldewangan19.workers.dev'),
   title: {
-    default: 'Sahajly | Free Photo and PDF Tools',
+    default: 'Sahajly — Everyday tasks, made simple',
     template: '%s | Sahajly',
   },
   description:
@@ -20,11 +20,10 @@ export const metadata: Metadata = {
     'passport photo size',
     'online form tools',
   ],
-  alternates: { canonical: '/' },
   openGraph: {
-    title: 'Sahajly | Free Photo and PDF Tools',
+    title: 'Sahajly — Everyday tasks, made simple',
     description:
-      'Prepare photos, signatures and PDFs for online forms with clear, private browser tools.',
+      'Simple, private image and PDF tools for everyday tasks. Resize, compress, combine and organize files in your browser.',
     url: '/',
     siteName: 'Sahajly',
     type: 'website',
@@ -48,6 +47,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <a className="skip-link" href="#main-content">Skip to main content</a>
         <div className="site-content">{children}</div>
         <SiteFooter />
         <FileAssistant />
