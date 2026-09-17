@@ -35,8 +35,8 @@ export const metadata: Metadata = {
     description: 'Free photo, signature and PDF tools for online forms.',
   },
   icons: {
-    icon: [{ url: '/favicon.svg?v=sahajly-20260917', type: 'image/svg+xml' }],
-    shortcut: [{ url: '/favicon.svg?v=sahajly-20260917', type: 'image/svg+xml' }],
+    icon: [{ url: '/sahajly-favicon.png', type: 'image/png' }],
+    shortcut: [{ url: '/sahajly-favicon.png', type: 'image/png' }],
     apple: [{ url: '/brand/apple-touch-icon.png?v=sahajly-20260917', sizes: '180x180', type: 'image/png' }],
   },
   manifest: '/site.webmanifest?v=sahajly-20260917',
@@ -53,3 +53,4 @@ export default function RootLayout({
     </html>
   );
 }
+
