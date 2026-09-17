@@ -6,7 +6,7 @@ export default function SiteFooter() {
     <footer className="site-footer">
       <div>
         <a href="/" aria-label="Sahajly home"><img className="sahajly-wordmark" src="/brand/sahajly-wordmark.svg" alt="Sahajly" width={198} height={60} /></a>
-        <p>Prepare photos, signatures and PDFs for your next application.</p>
+        <p>Everyday tasks, made simple.</p>
       </div>
       <nav aria-label="Footer navigation">
         <a
